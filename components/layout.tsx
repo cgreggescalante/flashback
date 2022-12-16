@@ -1,9 +1,9 @@
-import Navbar from './navbar'
+import Header from './header'
 
 export default function Layout({ children }: { children: any }) {
     return (
         <>
-            <Navbar />
+            <Header />
             <main>{children}</main>
         </>
     )
