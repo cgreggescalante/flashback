@@ -1,10 +1,31 @@
-import Chart from "../components/charts/testChart";
+import {Bar} from "react-chartjs-2";
+import {Chart, registerables} from "chart.js";
+import loadTracks from "../lib/loadTracks";
 
-const About = () => (
+Chart.register(...registerables)
+
+const options = {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true,
+            text: 'Test Chart'
+        }
+    }
+}
+
+const getStaticProps = async () => {
+    const data = await loadTracks()
+
+    return { props: { data } }
+}
+
+export { getStaticProps }
+
+const About = ({ data }: { data: any }) => (
     <>
         <h1>About</h1>
-        <button className="btn btn-primary m-3">Button Primary</button>
-        <Chart />
+        <Bar options={options} data={data} />
     </>
 )
 
