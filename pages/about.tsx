@@ -1,6 +1,6 @@
 import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
-import loadTracks from "../lib/loadTracks";
+import topTracksChart from "../lib/topTracksChart";
 
 Chart.register(...registerables)
 
@@ -9,13 +9,13 @@ const options = {
     plugins: {
         title: {
             display: true,
-            text: 'Test Chart'
+            text: 'Top Tracks - All Time'
         }
     }
 }
 
 const getStaticProps = async () => {
-    const data = await loadTracks()
+    const data = await topTracksChart()
 
     return { props: { data } }
 }
@@ -24,7 +24,6 @@ export { getStaticProps }
 
 const About = ({ data }: { data: any }) => (
     <>
-        <h1>About</h1>
         <Bar options={options} data={data} />
     </>
 )

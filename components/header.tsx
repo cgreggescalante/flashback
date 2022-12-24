@@ -6,6 +6,8 @@ const Header = () => (
         <Nav>
             <NavLink as={Link} href="/">Home</NavLink>
             <NavLink as={Link} href="/about">About</NavLink>
+            <NavLink as={Link} href="/charts/top_tracks">Top Tracks</NavLink>
+            <NavLink as={Link} href="/charts/top_artists">Top Artists</NavLink>
         </Nav>
     </Navbar>
 )

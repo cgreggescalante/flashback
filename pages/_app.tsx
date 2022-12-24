@@ -1,9 +1,10 @@
-import '../styles/globals.css'
 import 'bootstrap/dist/css/bootstrap.css'
-import type { AppProps } from 'next/app'
+import '../table.css'
+
+import type {AppProps} from 'next/app'
 import Layout from "../components/layout"
 import Head from "next/head";
-import { QueryClient, QueryClientProvider } from "react-query";
+import {QueryClient, QueryClientProvider} from "react-query";
 
 const queryClient = new QueryClient()
 
