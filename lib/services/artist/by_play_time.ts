@@ -1,4 +1,5 @@
 import clientPromise from "../../mongodb";
+import {PlaySelectors} from "../../mongo_constants";
 
 export const artistsByPlayTime = async (limit: number = 10, page: number = 0) => {
     const client = await clientPromise;
@@ -12,9 +13,9 @@ export const artistsByPlayTime = async (limit: number = 10, page: number = 0) =>
                 }},
             { $group: {
                     _id: {
-                        artist_name: "$master_metadata_album_artist_name"
+                        artist_name: PlaySelectors.TrackName
                     },
-                    total: { $sum: "$ms_played"}
+                    total: { $sum: PlaySelectors.MsPlayed}
                 }},
             { $sort: {
                     total: -1
