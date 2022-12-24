@@ -19,8 +19,8 @@ const chartOptions = {
 }
 
 const getStaticProps = async () => {
-    const chartData = await topTracksChart(topTracksAllTime)
-    const { data, columns } = await topTracksTable()
+    const chartData = await topTracksChart(topTracksAllTime(10))
+    const { data, columns } = await topTracksTable(topTracksAllTime(100))
 
     return { props: {
             table: {

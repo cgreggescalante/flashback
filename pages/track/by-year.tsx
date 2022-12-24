@@ -4,6 +4,7 @@ import {Chart, registerables} from "chart.js";
 import topTracksChart from "../../lib/services/track/topTracksChart";
 import topTracksTable from "../../lib/services/track/topTracksTable";
 import Layout from "../../components/track/layout";
+import {topTracksByYear} from "../../lib/services/track/by_play_time";
 
 Chart.register(...registerables)
 
@@ -12,14 +13,14 @@ const chartOptions = {
     plugins: {
         title: {
             display: true,
-            text: 'Top Tracks - All Time'
+            text: 'Top Tracks - 2022'
         }
     }
 }
 
 const getStaticProps = async () => {
-    const chartData = await topTracksChart()
-    const { data, columns } = await topTracksTable()
+    const chartData = await topTracksChart(topTracksByYear(2022))
+    const { data, columns } = await topTracksTable(topTracksByYear(2022, 50))
 
     return { props: {
             table: {
