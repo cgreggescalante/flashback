@@ -1,8 +1,8 @@
-import {ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN} from "./table_constants";
-import {artistsByPlayTime} from "./services/artist/by_play_time";
+import {topArtistsAllTime} from "./by_play_time";
+import {ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN} from "../../consts/table_constants";
 
 const topArtistsTable = async () => {
-    let artists = await artistsByPlayTime(100)
+    let artists = await topArtistsAllTime(100)
 
     artists.forEach(artist => artist.value = Math.floor(artist.value / 1000 / 60))
     artists = artists.map((artist, index) => ({rank: index + 1, ...artist}))

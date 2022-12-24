@@ -1,6 +1,10 @@
-import clientPromise from "../../mongodb";
+import {PlaySelector} from "../../consts/mongo_constants";
+import {PLAY} from "../../consts/aggregation";
+import clientPromise from "../mongodb";
 
-export const tracksByPlayTime = async (limit: number = 10, page: number = 0) => {
+const tracksByPlayTime = async (
+    limit: number = 10, page: number = 0
+) => {
     const client = await clientPromise;
 
     const db = client.db("flashback");
@@ -12,17 +16,23 @@ export const tracksByPlayTime = async (limit: number = 10, page: number = 0) => 
             }},
             { $group: {
                 _id: {
-                    uri: "$spotify_track_uri",
-                    track_name: "$master_metadata_track_name",
-                    artist_name: "$master_metadata_album_artist_name"
+                    uri: PlaySelector.TrackUri,
+                    track_name: PlaySelector.TrackName,
+                    artist_name: PlaySelector.ArtistName
                 },
-                total: { $sum: "$ms_played"}
+                total: PLAY.MS_PLAYED.SUM
             }},
             { $sort: {
                 total: -1
             }},
+            { $skip: limit * page },
             { $limit: limit }
         ]).toArray())
 
     return tracks.map(track => ({ ...track._id, value: track.total }))
 }
+
+export const topTracksAllTime = (
+    limit: number = 10,
+    page: number = 0
+) => tracksByPlayTime(limit, page)

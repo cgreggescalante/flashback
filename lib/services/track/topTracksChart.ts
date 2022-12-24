@@ -1,8 +1,8 @@
-import {tracksByPlayTime} from "./services/track/by_play_time";
-import {ChartGenerator} from "./chartGenerator";
+import {ChartGenerator} from "../chartGenerator";
+import {topTracksAllTime} from "./by_play_time";
 
 const topTracksChart: ChartGenerator = async () => {
-    const tracks = await tracksByPlayTime()
+    const tracks = await topTracksAllTime()
 
     const labels = tracks.map(track => `${track.track_name}`);
     const data = tracks.map(track => track.value / 1000 / 60);

@@ -1,4 +1,4 @@
-export enum PlaySelectors {
+export enum PlaySelector {
     TimeStamp = "$ts",
     Username = "$username",
     Platform = "$platform",

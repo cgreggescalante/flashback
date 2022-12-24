@@ -1,8 +1,8 @@
-import {tracksByPlayTime} from "./services/track/by_play_time";
-import {ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN, TRACK_NAME_COLUMN} from "./table_constants";
+import {topTracksAllTime} from "./by_play_time";
+import {ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN, TRACK_NAME_COLUMN} from "../../consts/table_constants";
 
 const topTracksTable = async () => {
-    let tracks = await tracksByPlayTime(100)
+    let tracks = await topTracksAllTime(100)
 
     tracks.forEach(track => track.value = Math.floor(track.value / 1000 / 60))
     tracks = tracks.map((track, index) => ({rank: index + 1, ...track}))
