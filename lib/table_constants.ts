@@ -12,3 +12,8 @@ export const MINUTES_PLAYED_COLUMN = {
     Header: "Minutes Played",
     accessor: "value"
 }
+
+export const RANK_COLUMN = {
+    Header: "#",
+    accessor: "rank"
+}

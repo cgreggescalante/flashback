@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predeploy": "next export",
+    "deploy": "gh-pages -d out --add true",
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
@@ -29,5 +31,8 @@
     "react-table": "^7.8.0",
     "swr": "^2.0.0",
     "typescript": "4.9.4"
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
   }
 }
