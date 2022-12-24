@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fcharts\u002Ftop_artists","\u002Fcharts\u002Ftop_tracks"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
