@@ -15,10 +15,8 @@ const getStaticPaths = () => ({
 
 const getStaticProps = async ({ params }: { params: any }) => {
     const year = Number.parseInt(params.year)
-    console.log(year)
     const chartData = await topArtistsChart(topArtistsByYear(year))
     const { data, columns } = await topArtistsTable(topArtistsByYear(year, 100))
-    console.log(data)
 
     const chartOptions = {
         responsive: true,
@@ -43,19 +41,15 @@ const getStaticProps = async ({ params }: { params: any }) => {
     }
 }
 
-const ByYear = (
-    { table, chart } : { table: any, chart: any }
-) => {
-    console.log(chart.data)
-    return (
-        <ArtistLayout>
-            <ArtistByYearLayout>
-                <Bar options={chart.options} data={chart.data} />
-                <Table data={table.data} columns={table.columns} />
-            </ArtistByYearLayout>
-        </ArtistLayout>
-    )
-}
+const ByYear = ({ table, chart } : { table: any, chart: any }) => (
+    <ArtistLayout>
+        <ArtistByYearLayout>
+            <Bar options={chart.options} data={chart.data} />
+            <Table data={table.data} columns={table.columns} />
+        </ArtistByYearLayout>
+    </ArtistLayout>
+)
+
 
 export { getStaticPaths, getStaticProps }
 
