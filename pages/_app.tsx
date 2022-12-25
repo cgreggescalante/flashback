@@ -2,9 +2,9 @@ import 'bootstrap/dist/css/bootstrap.css'
 import '../table.css'
 
 import type {AppProps} from 'next/app'
-import Layout from "../components/layout"
 import Head from "next/head";
 import {QueryClient, QueryClientProvider} from "react-query";
+import {MainLayout} from "../components/layout";
 
 const queryClient = new QueryClient()
 
@@ -14,9 +14,9 @@ const App = ({ Component, pageProps }: AppProps) => (
             <title>Flashback</title>
         </Head>
         <QueryClientProvider client={queryClient}>
-            <Layout>
+            <MainLayout>
                 <Component {...pageProps} />
-            </Layout>
+            </MainLayout>
         </QueryClientProvider>
 
     </>

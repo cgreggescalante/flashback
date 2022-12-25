@@ -30,7 +30,10 @@ const tracksByPlayTime = async (
                     master_metadata_track_name: { $ne: null }
                 },
                 {
-                    timestamp: { $gte: time_start, $lt: time_end }
+                    timestamp: { $gte: time_start }
+                },
+                {
+                    timestamp: { $lte: time_end }
                 }
             ]
         } }

@@ -68,7 +68,7 @@ export const topArtistsByYear = (
     year: number,
     limit: number = 10,
     page: number = 0,
-) => artistsByPlayTime(
+) => () => artistsByPlayTime(
     limit,
     page,
     new Date(year, 0),
@@ -78,7 +78,7 @@ export const topArtistsByYear = (
 export const topArtistsAllTime = (
     limit: number = 10,
     page: number = 0
-) => artistsByPlayTime(
+) => () => artistsByPlayTime(
     limit,
     page
 )

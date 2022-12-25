@@ -3,8 +3,8 @@ import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
 import topTracksChart from "../../lib/services/track/topTracksChart";
 import topTracksTable from "../../lib/services/track/topTracksTable";
-import Layout from "../../components/track/layout";
 import {topTracksAllTime} from "../../lib/services/track/by_play_time";
+import {TrackLayout} from "../../components/layout";
 
 Chart.register(...registerables)
 
@@ -37,10 +37,10 @@ const getStaticProps = async () => {
 const AllTime = (
     { table, chart } : { table: any, chart: any }
 ) => (
-    <Layout>
+    <TrackLayout>
         <Bar options={chartOptions} data={chart.data} />
         <Table data={table.data} columns={table.columns} />
-    </Layout>
+    </TrackLayout>
 )
 
 export { getStaticProps }
