@@ -1,8 +1,6 @@
 import {ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN} from "../../consts/table_constants";
 
-const topArtistsTable = async (getData: Function) => {
-    let artists = await getData()
-
+const topArtistsTable = async (artists: any[]) => {
     artists.forEach((artist: any) => artist.value = Math.floor(artist.value / 1000 / 60))
     artists = artists.map((artist: any, index: number) => ({rank: index + 1, ...artist}))
 

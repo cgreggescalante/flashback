@@ -2,7 +2,7 @@ import {PlaySelector} from "../../consts/mongo_constants";
 import {PLAY} from "../../consts/aggregation";
 import clientPromise from "../mongodb";
 
-const artistsByPlayTime = async (
+export const topArtists = async (
     limit: number = 10,
     page: number = 0,
     time_start: Date = new Date('0000-01-01T00:00:01Z'),
@@ -68,7 +68,7 @@ export const topArtistsByYear = (
     year: number,
     limit: number = 10,
     page: number = 0,
-) => () => artistsByPlayTime(
+) => topArtists(
     limit,
     page,
     new Date(year, 0),
@@ -78,7 +78,7 @@ export const topArtistsByYear = (
 export const topArtistsAllTime = (
     limit: number = 10,
     page: number = 0
-) => () => artistsByPlayTime(
+) => topArtists(
     limit,
     page
 )

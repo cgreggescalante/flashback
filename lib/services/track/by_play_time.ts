@@ -72,7 +72,7 @@ export const topTracksByYear = (
     year: number,
     limit: number = 10,
     page: number = 0,
-) => () => tracksByPlayTime(
+) => tracksByPlayTime(
     limit,
     page,
     new Date(year, 0),
@@ -82,7 +82,7 @@ export const topTracksByYear = (
 export const topTracksAllTime = (
     limit: number = 10,
     page: number = 0
-) => () => tracksByPlayTime(
+) => tracksByPlayTime(
     limit,
     page
 )

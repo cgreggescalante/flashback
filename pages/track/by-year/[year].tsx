@@ -15,8 +15,10 @@ const getStaticPaths = () => ({
 
 const getStaticProps = async ({ params }: { params: any }) => {
     const year = Number.parseInt(params.year)
-    const chartData = await topTracksChart(topTracksByYear(year))
-    const { data, columns } = await topTracksTable(topTracksByYear(year, 50))
+    const tracks = await topTracksByYear(year, 100)
+
+    const chartData = await topTracksChart(tracks.slice(0, 10))
+    const { data, columns } = await topTracksTable(tracks)
 
     const chartOptions = {
         responsive: true,

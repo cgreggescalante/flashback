@@ -19,8 +19,10 @@ const chartOptions = {
 }
 
 const getStaticProps = async () => {
-    const chartData = await topArtistsChart(topArtistsAllTime(10))
-    const { data, columns } = await topArtistsTable(topArtistsAllTime(100))
+    const artists = await topArtistsAllTime(100)
+
+    const chartData = await topArtistsChart(artists.slice(0, 10))
+    const { data, columns } = await topArtistsTable(artists)
 
     return { props: {
             table: {

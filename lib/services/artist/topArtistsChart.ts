@@ -1,21 +1,7 @@
-import {ChartGenerator} from "../chartGenerator";
+import {createChart} from "../chartGenerator";
 
-const topArtistsChart: ChartGenerator = async (getArtists: Function) => {
-    const artists = await getArtists()
+const createLabel = (artist: any) => artist.artist_name
+const createDatum = (artist: any) => artist.value / 1000 / 60
+const label = "Time (minutes)"
 
-    const labels = artists.map((artist: any) => artist.artist_name);
-    const data = artists.map((artist: any) => artist.value / 1000 / 60);
-
-    return {
-        labels,
-        datasets: [
-            {
-                label: 'Time (minutes)',
-                data: data,
-                backgroundColor: 'rgba(84,59,208,0.5)'
-            }
-        ]
-    }
-}
-
-export default topArtistsChart
+export default createChart(createLabel, createDatum, label);
