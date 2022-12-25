@@ -4,7 +4,7 @@ import {Chart, registerables} from "chart.js";
 import {topArtistsAllTime} from "../../lib/services/artist/by_play_time";
 import topArtistsChart from "../../lib/services/artist/topArtistsChart";
 import topArtistsTable from "../../lib/services/artist/topArtistsTable";
-import {TrackLayout} from "../../components/layout";
+import {ArtistLayout} from "../../components/layout";
 
 Chart.register(...registerables)
 
@@ -37,10 +37,10 @@ const getStaticProps = async () => {
 const AllTime = (
     { table, chart } : { table: any, chart: any }
 ) => (
-    <TrackLayout>
+    <ArtistLayout>
         <Bar options={chartOptions} data={chart.data} />
         <Table data={table.data} columns={table.columns} />
-    </TrackLayout>
+    </ArtistLayout>
 )
 
 export { getStaticProps }
