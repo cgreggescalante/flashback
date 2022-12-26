@@ -2,15 +2,6 @@
   "name": "flashback",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "predeploy": "next export",
-    "deploy": "gh-pages -d out --add true",
-    "dev": "next dev",
-    "build": "next build",
-    "export": "next export",
-    "start": "next start",
-    "lint": "next lint"
-  },
   "dependencies": {
     "@next/font": "13.0.7",
     "@types/node": "18.11.15",
@@ -18,9 +9,8 @@
     "@types/react-dom": "18.0.9",
     "@types/react-table": "^7.7.12",
     "bootstrap": "^5.2.3",
+    "chart.js": "^4.1.1",
     "dotenv": "^16.0.3",
-    "eslint": "8.22.0",
-    "eslint-config-next": "13.0.7",
     "mongodb": "^4.13.0",
     "next": "13.0.7",
     "react": "18.2.0",
@@ -33,6 +23,11 @@
     "typescript": "4.9.4"
   },
   "devDependencies": {
-    "gh-pages": "^4.0.0"
-  }
+    "@nrwl/nx-cloud": "latest",
+    "gh-pages": "^4.0.0",
+    "nx": "15.4.1"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

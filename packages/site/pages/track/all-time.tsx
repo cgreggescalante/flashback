@@ -1,10 +1,9 @@
 import Table from "../../components/table/table";
 import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
-import {topArtistsAllTime} from "../../lib/services/artist/by_play_time";
-import topArtistsChart from "../../lib/services/artist/topArtistsChart";
-import topArtistsTable from "../../lib/services/artist/topArtistsTable";
-import {ArtistLayout} from "../../components/layout";
+import {topTracksAllTime} from "services";
+import {TrackLayout} from "../../components/layout";
+import {topTrackChart, topTrackTable} from "format-data";
 
 Chart.register(...registerables)
 
@@ -13,16 +12,16 @@ const chartOptions = {
     plugins: {
         title: {
             display: true,
-            text: 'Top Artists - All Time'
+            text: 'Top Tracks - All Time'
         }
     }
 }
 
 const getStaticProps = async () => {
-    const artists = await topArtistsAllTime(100)
+    const tracks = await topTracksAllTime(100)
 
-    const chartData = await topArtistsChart(artists.slice(0, 10))
-    const { data, columns } = await topArtistsTable(artists)
+    const chartData = topTrackChart(tracks.slice(0, 10))
+    const { data, columns } = topTrackTable(tracks)
 
     return { props: {
             table: {
@@ -39,10 +38,10 @@ const getStaticProps = async () => {
 const AllTime = (
     { table, chart } : { table: any, chart: any }
 ) => (
-    <ArtistLayout>
+    <TrackLayout>
         <Bar options={chartOptions} data={chart.data} />
         <Table data={table.data} columns={table.columns} />
-    </ArtistLayout>
+    </TrackLayout>
 )
 
 export { getStaticProps }

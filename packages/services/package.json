@@ -1,0 +1,10 @@
+{
+  "name": "services",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build services": "tsc index.ts --watch --outDir dist"
+  },
+  "dependencies": {
+  }
+}

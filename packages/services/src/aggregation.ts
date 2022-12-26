@@ -8,3 +8,14 @@ export const PLAY = {
         NOT_NULL: { master_metadata_album_artist_name: { $ne: null } }
     }
 }
+
+export const CONVERT_TIMESTAMP = {
+    $addFields: {
+        timestamp: {
+            $dateFromString: {
+                dateString: PlaySelector.TimeStamp,
+                format: "%Y-%m-%dT%H:%M:%SZ"
+            }
+        }
+    }
+}

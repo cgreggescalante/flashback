@@ -1,5 +1,5 @@
-import {PlaySelector} from "../../consts/mongo_constants";
-import {PLAY} from "../../consts/aggregation";
+import {PlaySelector} from "../mongo_constants";
+import {CONVERT_TIMESTAMP, PLAY} from "../aggregation";
 import clientPromise from "../mongodb";
 
 const tracksByPlayTime = async (
@@ -11,17 +11,6 @@ const tracksByPlayTime = async (
     const client = await clientPromise;
 
     const db = client.db("flashback");
-
-    const dateConvertStage = {
-        $addFields: {
-            timestamp: {
-                $dateFromString: {
-                    dateString: PlaySelector.TimeStamp,
-                    format: "%Y-%m-%dT%H:%M:%SZ"
-                }
-            }
-        }
-    }
 
     const matchStage = {
         $match: {
@@ -57,7 +46,7 @@ const tracksByPlayTime = async (
 
     const tracks = await (db.collection("play")
         .aggregate([
-            dateConvertStage,
+            CONVERT_TIMESTAMP,
             matchStage,
             groupStage,
             sortStage,

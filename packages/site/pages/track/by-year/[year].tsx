@@ -1,10 +1,9 @@
 import Table from "../../../components/table/table";
 import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
-import topTracksChart from "../../../lib/services/track/topTracksChart";
-import topTracksTable from "../../../lib/services/track/topTracksTable";
-import {topTracksByYear} from "../../../lib/services/track/by_play_time";
+import {topTracksByYear} from "services";
 import {TrackByYearLayout, TrackLayout} from "../../../components/layout";
+import {topTrackChart, topTrackTable} from "format-data"
 
 Chart.register(...registerables)
 
@@ -17,8 +16,8 @@ const getStaticProps = async ({ params }: { params: any }) => {
     const year = Number.parseInt(params.year)
     const tracks = await topTracksByYear(year, 100)
 
-    const chartData = await topTracksChart(tracks.slice(0, 10))
-    const { data, columns } = await topTracksTable(tracks)
+    const chartData = topTrackChart(tracks.slice(0, 10))
+    const { data, columns } = topTrackTable(tracks)
 
     const chartOptions = {
         responsive: true,

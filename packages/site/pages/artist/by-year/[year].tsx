@@ -1,10 +1,9 @@
 import Table from "../../../components/table/table";
 import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
-import topArtistsTable from "../../../lib/services/artist/topArtistsTable";
-import {topArtistsByYear} from "../../../lib/services/artist/by_play_time";
+import {topArtistsByYear} from "services";
 import {ArtistByYearLayout, ArtistLayout} from "../../../components/layout";
-import topArtistsChart from "../../../lib/services/artist/topArtistsChart";
+import {topArtistChart, topArtistTable} from "format-data";
 
 Chart.register(...registerables)
 
@@ -16,8 +15,8 @@ const getStaticPaths = () => ({
 const getStaticProps = async ({ params }: { params: any }) => {
     const year = Number.parseInt(params.year)
     const topArtists = await topArtistsByYear(year, 100)
-    const chartData = await topArtistsChart(topArtists.slice(0, 10))
-    const { data, columns } = await topArtistsTable(topArtists)
+    const chartData = topArtistChart(topArtists.slice(0, 10))
+    const { data, columns } = topArtistTable(topArtists)
 
     const chartOptions = {
         responsive: true,

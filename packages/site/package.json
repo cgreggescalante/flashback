@@ -1,0 +1,14 @@
+{
+  "name": "site",
+  "version": "1.0.0",
+  "scripts": {
+    "predeploy": "next export",
+    "deploy": "gh-pages -d out --add true",
+    "dev": "next dev",
+    "build": "next build"
+  },
+  "dependencies": {
+    "services": "*",
+    "format-data": "*"
+  }
+}
