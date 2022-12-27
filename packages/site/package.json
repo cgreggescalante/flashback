@@ -8,7 +8,7 @@
     "build": "next build"
   },
   "dependencies": {
-    "services": "*",
+    "oracle-services": "*",
     "format-data": "*"
   }
 }

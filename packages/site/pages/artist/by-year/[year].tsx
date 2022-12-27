@@ -1,7 +1,7 @@
 import Table from "../../../components/table/table";
 import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
-import {topArtistsByYear} from "services";
+import {topArtistsByYear} from "oracle-services";
 import {ArtistByYearLayout, ArtistLayout} from "../../../components/layout";
 import {topArtistChart, topArtistTable} from "format-data";
 

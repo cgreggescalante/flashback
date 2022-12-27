@@ -1,7 +1,7 @@
 import Table from "../../../components/table/table";
 import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
-import {topTracksByYear} from "services";
+import {topTracksByYear} from "oracle-services";
 import {TrackByYearLayout, TrackLayout} from "../../../components/layout";
 import {topTrackChart, topTrackTable} from "format-data"
 

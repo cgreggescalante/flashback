@@ -1,7 +1,7 @@
 import Table from "../../components/table/table";
 import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
-import {topTracksAllTime} from "services";
+import {topTracks} from "oracle-services";
 import {TrackLayout} from "../../components/layout";
 import {topTrackChart, topTrackTable} from "format-data";
 
@@ -18,7 +18,7 @@ const chartOptions = {
 }
 
 const getStaticProps = async () => {
-    const tracks = await topTracksAllTime(100)
+    const tracks = await topTracks(100)
 
     const chartData = topTrackChart(tracks.slice(0, 10))
     const { data, columns } = topTrackTable(tracks)

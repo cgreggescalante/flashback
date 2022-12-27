@@ -36,4 +36,5 @@ yarn-error.log*
 next-env.d.ts
 /.env
 /packages/format-data/dist/
-/packages/services/dist/
+/packages/mongodb-services/dist/
+/packages/oracle-services/dist/

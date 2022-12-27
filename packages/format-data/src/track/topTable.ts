@@ -3,7 +3,7 @@ import createTableFormat from "../createTableFormat";
 import {formatTableData} from "../../types";
 
 const processElement = (track: any, index: number) => {
-    track.value = Math.floor(track.value / 1000 / 60)
+    track.value = Math.floor(track.total_ms_played / 1000 / 60)
 
     return {
         rank: index + 1,

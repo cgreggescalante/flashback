@@ -1,7 +1,7 @@
 import Table from "../../components/table/table";
 import {Bar} from "react-chartjs-2";
 import {Chart, registerables} from "chart.js";
-import {topArtistsAllTime} from "services";
+import {topArtists} from "oracle-services";
 import {ArtistLayout} from "../../components/layout";
 import {topArtistChart, topArtistTable} from "format-data";
 
@@ -18,7 +18,7 @@ const chartOptions = {
 }
 
 const getStaticProps = async () => {
-    const artists = await topArtistsAllTime(100)
+    const artists = await topArtists(100)
 
     const chartData = topArtistChart(artists.slice(0, 10))
     const { data, columns } = topArtistTable(artists)
