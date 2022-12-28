@@ -4,9 +4,9 @@
 - [x] Top Artists
 - [ ] Top Albums
 - [ ] Top Genres
-- [ ] Listening Time (Year, Month, Week, Day)
+- [x] Listening Time (Year, Month, Week, Day)
 - [ ] Chart top track/artist/album/genre using rolling average
 
 
 - [ ] Select year with dropdown
-- [ ] Custom date ranges
+- [x] Custom date ranges

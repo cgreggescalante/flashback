@@ -1,100 +1,91 @@
+import { Chart, registerables } from "chart.js";
+import { topTrackChart, topTrackTable } from "format-data";
+import { TOP_TRACKS } from "oracle-services";
+import { useState } from "react";
+import { Bar } from "react-chartjs-2";
+import useSWR from "swr";
+
+import { TrackLayout } from "../../components/layout";
 import Table from "../../components/table";
-import {Bar} from "react-chartjs-2";
-import {Chart, registerables} from "chart.js";
-import {ArtistLayout} from "../../components/layout";
-import {topTrackChart, topTrackTable} from "format-data";
-import useSWR from 'swr';
-import {useState} from "react";
 
-Chart.register(...registerables)
-
-const URL = "https://g0cde1310ac37a5-flashback.adb.us-ashburn-1.oraclecloudapps.com/ords/client/api/track/top?"
+Chart.register(...registerables);
 
 const chartOptions = {
-    responsive: true,
-    plugins: {
-        title: {
-            display: true,
-            text: 'Top Tracks'
-        }
+  responsive: true,
+  plugins: {
+    title: {
+      display: true,
+      text: "Top Tracks"
     }
-}
+  }
+};
 
 const ByRange = () => {
-    const [rangeStart, setRangeStart] = useState("")
-    const [rangeEnd, setRangeEnd] = useState("")
+  const [rangeStart, setRangeStart] = useState("");
+  const [rangeEnd, setRangeEnd] = useState("");
 
-    const handleChangeRangeStart = (event) => {
-        setRangeStart(event.target.value)
+  const handleChangeRangeStart = (event) => setRangeStart(event.target.value);
+
+  const handleChangeRangeEnd = (event) => setRangeEnd(event.target.value);
+
+  const { data, mutate, error } = useSWR("-", () => {
+    const params = {
+      limit: "100"
+    };
+
+    if (rangeStart) {
+      params["range_start"] = `${rangeStart}T00:00:00.00Z`;
     }
 
-    const handleChangeRangeEnd = (event) => {
-        setRangeEnd(event.target.value)
+    if (rangeEnd) {
+      params["range_end"] = `${rangeEnd}T00:00:00.00Z`;
     }
 
-    const { data, mutate, error } = useSWR("-", () => {
-        const params = {
-            "limit": "100"
-        }
+    const request = TOP_TRACKS + new URLSearchParams(params);
 
-        if (rangeStart) {
-            params["range_start"] = `${rangeStart}T00:00:00.00Z`
-        }
+    return fetch(request)
+      .then((res) => res.json())
+      .then((data) => data.items);
+  });
 
-        if (rangeEnd) {
-            params["range_end"] = `${rangeEnd}T00:00:00.00Z`
-        }
+  if (error) return <h3>Failed to load data</h3>;
+  if (!data) return <h3>Loading...</h3>;
 
-        console.log(params)
+  const chartData = topTrackChart(data.slice(0, 10));
+  const tableData = topTrackTable(data);
 
-        const request = URL + new URLSearchParams(params)
+  return (
+    <TrackLayout>
+      <label>
+        Start
+        <input
+          type="date"
+          id="range_start"
+          value={rangeStart}
+          onChange={handleChangeRangeStart}
+        />
+      </label>
 
-        return fetch(request)
-            .then(res => res.json())
-            .then(data => data.items)
-    })
+      <br />
 
-    if (error) return <h3>Failed to load data</h3>
-    if (!data) return <h3>Loading...</h3>
+      <label>
+        End
+        <input
+          type="date"
+          id="range_end"
+          value={rangeEnd}
+          onChange={handleChangeRangeEnd}
+        />
+      </label>
 
-    const chartData = topTrackChart(data.slice(0, 10))
-    const tableData = topTrackTable(data)
+      <br />
 
-    return (
-        <ArtistLayout>
-            <label>
-                Start
-                <input type="date" id="range_start" value={rangeStart} onChange={handleChangeRangeStart}/>
-            </label>
+      <button onClick={() => mutate()}>Submit</button>
 
-            <br/>
+      <Bar options={chartOptions} data={chartData} />
+      <Table data={tableData.data} columns={tableData.columns} />
+    </TrackLayout>
+  );
+};
 
-            <label>
-                End
-                <input type="date" id="range_end" value={rangeEnd} onChange={handleChangeRangeEnd}/>
-            </label>
-
-            <br/>
-
-            <button onClick={() => mutate()}>Submit</button>
-
-            {
-                chartData ? (
-                    <Bar options={chartOptions} data={chartData} />
-                ) : (
-                    <h2>Loading Chart</h2>
-                )
-            }
-            {
-                tableData ? (
-                    <Table data={tableData.data} columns={tableData.columns} />
-                ) : (
-                    <h2>Loading Table</h2>
-                )
-            }
-
-        </ArtistLayout>
-    )
-}
-
-export default ByRange
+export default ByRange;
