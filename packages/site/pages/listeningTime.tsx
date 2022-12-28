@@ -24,30 +24,32 @@ const chartOptions = {
     title: {
       display: true,
       text: "Listening Time"
-    }
+    },
   }
 };
 
-const offsets = {
-  day: 73,
-  week: 52,
-  month: 12,
-  year: 0
-};
-
-const chartFormatters = {
-  day: listeningTimeDayChart,
-  week: listeningTimeWeekChart,
-  month: listeningTimeMonthChart,
-  year: listeningTimeYearChart
-};
-
-const tableFormatters = {
-  day: listeningTimeDayTable,
-  week: listeningTimeWeekTable,
-  month: listeningTimeMonthTable,
-  year: listeningTimeYearTable
-};
+const resolutionConfig = {
+  day: {
+    offset: 73,
+    formatChart: listeningTimeDayChart,
+    formatTable: listeningTimeDayTable
+  },
+  week: {
+    offset: 52,
+    formatChart: listeningTimeWeekChart,
+    formatTable: listeningTimeWeekTable
+  },
+  month: {
+    offset: 12,
+    formatChart: listeningTimeMonthChart,
+    formatTable: listeningTimeMonthTable
+  },
+  year: {
+    offset: 0,
+    formatChart: listeningTimeYearChart,
+    formatTable: listeningTimeYearTable
+  }
+}
 
 const ListeningTime = () => {
   const [resolution, setResolution] = useState("week");
@@ -59,10 +61,10 @@ const ListeningTime = () => {
   };
 
   const { data, error } = useSWR(
-    `${LISTENING_TIME}${resolution}?offset=${pageIndex * offsets[resolution]}`,
+    `${LISTENING_TIME}${resolution}?offset=${pageIndex * resolutionConfig[resolution].offset}`,
     (...args) => {
-      let formatChartData = chartFormatters[resolution];
-      let formatTableData = tableFormatters[resolution];
+      let formatChartData = resolutionConfig[resolution].formatChart;
+      let formatTableData = resolutionConfig[resolution].formatTable;
 
       return fetch(...args)
         .then((res) => res.json())
@@ -76,6 +78,8 @@ const ListeningTime = () => {
 
   return (
     <>
+      <h2>Listening Time</h2>
+
       <label>
         Resolution
         <select value={resolution} onChange={handleChangeResolution}>
@@ -90,8 +94,6 @@ const ListeningTime = () => {
 
       <button disabled={pageIndex == 0} onClick={() => setPageIndex(pageIndex - 1)}>{"<"}</button>
       <button onClick={() => setPageIndex(pageIndex + 1)}>{">"}</button>
-
-      <h2>Listening Time</h2>
 
       {error ? (
         <h3>Error while retrieving data</h3>
