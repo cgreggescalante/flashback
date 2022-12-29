@@ -1,3 +1,6 @@
+import FailedToLoad from "./failedToLoad";
+import LoadingData from "./loadingData";
+
 const LoadedComponent = ({
   data,
   error,
@@ -7,8 +10,8 @@ const LoadedComponent = ({
   error: any;
   component: (data) => JSX.Element;
 }) => {
-  if (error) return <h3>Failed to load data</h3>;
-  if (!data) return <h3>Loading...</h3>;
+  if (error) return <FailedToLoad />;
+  if (!data) return <LoadingData />;
 
   return component({ data });
 };
