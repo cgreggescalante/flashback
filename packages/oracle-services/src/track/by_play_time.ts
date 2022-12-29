@@ -1,3 +1,5 @@
+import { TOP_TRACKS } from "../uris";
+
 export const topTracks = async (
   limit: number = 10,
   page: number = 0,
@@ -15,7 +17,7 @@ export const topTracks = async (
     "range_end": range_end
   };
 
-  const url = "https://g0cde1310ac37a5-flashback.adb.us-ashburn-1.oraclecloudapps.com/ords/client/api/track/top?" + (new URLSearchParams(params));
+  const url = TOP_TRACKS + (new URLSearchParams(params));
 
   return fetch(url, options)
     .then(res => res.json())

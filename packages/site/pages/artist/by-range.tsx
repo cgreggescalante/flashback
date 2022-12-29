@@ -20,6 +20,30 @@ const chartOptions = {
   }
 };
 
+const fetcher = ({ rangeStart, rangeEnd }: { rangeStart: string, rangeEnd: string }) => {
+  const params = {
+    limit: "100"
+  };
+
+  if (rangeStart) {
+    params["range_start"] = `${rangeStart}T00:00:00.00Z`;
+  }
+
+  if (rangeEnd) {
+    params["range_end"] = `${rangeEnd}T00:00:00.00Z`;
+  }
+
+  const request = TOP_ARTISTS + new URLSearchParams(params);
+
+  return fetch(request)
+    .then((res) => res.json())
+    .then((data) => data.items)
+    .then((data) => ({
+      chartData: topArtistChart(data.slice(0, 10)),
+      tableData: topArtistTable(data)
+    }));
+};
+
 const ByRange = () => {
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
@@ -32,31 +56,10 @@ const ByRange = () => {
     setRangeEnd(event.target.value);
   };
 
-  const { data, mutate, error } = useSWR("-", () => {
-    const params = {
-      limit: "100"
-    };
-
-    if (rangeStart) {
-      params["range_start"] = `${rangeStart}T00:00:00.00Z`;
-    }
-
-    if (rangeEnd) {
-      params["range_end"] = `${rangeEnd}T00:00:00.00Z`;
-    }
-
-    const request = TOP_ARTISTS + new URLSearchParams(params);
-
-    return fetch(request)
-      .then((res) => res.json())
-      .then((data) => data.items);
-  });
-
-  if (error) return <h3>Failed to load data</h3>;
-  if (!data) return <h3>Loading...</h3>;
-
-  const chartData = topArtistChart(data.slice(0, 10));
-  const tableData = topArtistTable(data);
+  const { data, error } = useSWR(
+    { rangeStart, rangeEnd, key: "artists" },
+    fetcher
+  );
 
   return (
     <ArtistLayout>
@@ -82,19 +85,15 @@ const ByRange = () => {
         />
       </label>
 
-      <br />
-
-      <button onClick={() => mutate()}>Submit</button>
-
-      {chartData ? (
-        <Bar options={chartOptions} data={chartData} />
+      {error ? (
+        <h3>Failed to load data</h3>
+      ) : data ? (
+        <>
+          <Bar options={chartOptions} data={data.chartData} />
+          <Table data={data.tableData.data} columns={data.tableData.columns} />
+        </>
       ) : (
-        <h2>Loading Chart</h2>
-      )}
-      {tableData ? (
-        <Table data={tableData.data} columns={tableData.columns} />
-      ) : (
-        <h2>Loading Table</h2>
+        <h3>Loading...</h3>
       )}
     </ArtistLayout>
   );

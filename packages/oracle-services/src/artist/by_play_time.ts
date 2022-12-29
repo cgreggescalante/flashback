@@ -1,3 +1,5 @@
+import { TOP_ARTISTS } from "../uris";
+
 export const topArtists = async (
   limit: number = 10,
   page: number = 0,
@@ -15,7 +17,7 @@ export const topArtists = async (
     "range_end": range_end
   };
 
-  const url = "https://g0cde1310ac37a5-flashback.adb.us-ashburn-1.oraclecloudapps.com/ords/client/api/artist/top?" + (new URLSearchParams(params));
+  const url = TOP_ARTISTS + (new URLSearchParams(params));
 
   return fetch(url, options)
     .then(res => res.json())

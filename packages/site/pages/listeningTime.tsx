@@ -24,7 +24,7 @@ const chartOptions = {
     title: {
       display: true,
       text: "Listening Time"
-    },
+    }
   }
 };
 
@@ -49,7 +49,30 @@ const resolutionConfig = {
     formatChart: listeningTimeYearChart,
     formatTable: listeningTimeYearTable
   }
-}
+};
+
+const fetcher = ({
+  resolution,
+  pageIndex
+}: {
+  resolution: string;
+  pageIndex: number;
+}) => {
+  let formatChartData = resolutionConfig[resolution].formatChart;
+  let formatTableData = resolutionConfig[resolution].formatTable;
+
+  const url = `${LISTENING_TIME}${resolution}?offset=${
+    pageIndex * resolutionConfig[resolution].offset
+  }`;
+
+  return fetch(url)
+    .then((res) => res.json())
+    .then((data) => data.items)
+    .then((data) => ({
+      chartData: formatChartData(data),
+      tableData: formatTableData(data)
+    }));
+};
 
 const ListeningTime = () => {
   const [resolution, setResolution] = useState("week");
@@ -61,19 +84,11 @@ const ListeningTime = () => {
   };
 
   const { data, error } = useSWR(
-    `${LISTENING_TIME}${resolution}?offset=${pageIndex * resolutionConfig[resolution].offset}`,
-    (...args) => {
-      let formatChartData = resolutionConfig[resolution].formatChart;
-      let formatTableData = resolutionConfig[resolution].formatTable;
-
-      return fetch(...args)
-        .then((res) => res.json())
-        .then((data) => data.items)
-        .then((data) => ({
-          chartData: formatChartData(data),
-          tableData: formatTableData(data)
-        }));
-    }
+    {
+      resolution,
+      pageIndex
+    },
+    fetcher
   );
 
   return (
@@ -92,7 +107,12 @@ const ListeningTime = () => {
 
       <br />
 
-      <button disabled={pageIndex == 0} onClick={() => setPageIndex(pageIndex - 1)}>{"<"}</button>
+      <button
+        disabled={pageIndex == 0}
+        onClick={() => setPageIndex(pageIndex - 1)}
+      >
+        {"<"}
+      </button>
       <button onClick={() => setPageIndex(pageIndex + 1)}>{">"}</button>
 
       {error ? (
