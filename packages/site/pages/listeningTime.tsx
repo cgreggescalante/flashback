@@ -14,6 +14,7 @@ import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 
+import LoadedComponent from "../components/loadedComponent";
 import Table from "../components/table";
 
 Chart.register(...registerables);
@@ -74,6 +75,13 @@ const fetcher = ({
     }));
 };
 
+const DataComponent = ({ data }) => (
+  <>
+    <Bar options={chartOptions} data={data.chartData} />
+    <Table data={data.tableData.data} columns={data.tableData.columns} />
+  </>
+);
+
 const ListeningTime = () => {
   const [resolution, setResolution] = useState("week");
   const [pageIndex, setPageIndex] = useState(0);
@@ -115,16 +123,7 @@ const ListeningTime = () => {
       </button>
       <button onClick={() => setPageIndex(pageIndex + 1)}>{">"}</button>
 
-      {error ? (
-        <h3>Error while retrieving data</h3>
-      ) : data ? (
-        <>
-          <Bar options={chartOptions} data={data.chartData} />
-          <Table data={data.tableData.data} columns={data.tableData.columns} />
-        </>
-      ) : (
-        <h3>Loading...</h3>
-      )}
+      <LoadedComponent data={data} error={error} component={DataComponent} />
     </>
   );
 };

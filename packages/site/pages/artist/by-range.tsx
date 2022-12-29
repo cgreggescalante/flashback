@@ -6,6 +6,7 @@ import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 
 import { ArtistLayout } from "../../components/layout";
+import LoadedComponent from "../../components/loadedComponent";
 import Table from "../../components/table";
 
 Chart.register(...registerables);
@@ -20,7 +21,13 @@ const chartOptions = {
   }
 };
 
-const fetcher = ({ rangeStart, rangeEnd }: { rangeStart: string, rangeEnd: string }) => {
+const fetcher = ({
+  rangeStart,
+  rangeEnd
+}: {
+  rangeStart: string;
+  rangeEnd: string;
+}) => {
   const params = {
     limit: "100"
   };
@@ -43,6 +50,13 @@ const fetcher = ({ rangeStart, rangeEnd }: { rangeStart: string, rangeEnd: strin
       tableData: topArtistTable(data)
     }));
 };
+
+const DataComponent = ({ data }) => (
+  <>
+    <Bar options={chartOptions} data={data.chartData} />
+    <Table data={data.tableData.data} columns={data.tableData.columns} />
+  </>
+);
 
 const ByRange = () => {
   const [rangeStart, setRangeStart] = useState("");
@@ -85,16 +99,7 @@ const ByRange = () => {
         />
       </label>
 
-      {error ? (
-        <h3>Failed to load data</h3>
-      ) : data ? (
-        <>
-          <Bar options={chartOptions} data={data.chartData} />
-          <Table data={data.tableData.data} columns={data.tableData.columns} />
-        </>
-      ) : (
-        <h3>Loading...</h3>
-      )}
+      <LoadedComponent data={data} error={error} component={DataComponent} />
     </ArtistLayout>
   );
 };

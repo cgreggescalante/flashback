@@ -6,6 +6,7 @@ import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 
 import { TrackLayout } from "../../components/layout";
+import LoadedComponent from "../../components/loadedComponent";
 import Table from "../../components/table";
 
 Chart.register(...registerables);
@@ -20,7 +21,13 @@ const chartOptions = {
   }
 };
 
-const fetcher = ({rangeStart, rangeEnd}: {rangeStart: string, rangeEnd: string}) => {
+const fetcher = ({
+  rangeStart,
+  rangeEnd
+}: {
+  rangeStart: string;
+  rangeEnd: string;
+}) => {
   const params = {
     limit: "100"
   };
@@ -42,7 +49,14 @@ const fetcher = ({rangeStart, rangeEnd}: {rangeStart: string, rangeEnd: string})
       chartData: topTrackChart(data.slice(0, 10)),
       tableData: topTrackTable(data)
     }));
-}
+};
+
+const DataComponent = ({ data }) => (
+  <>
+    <Bar options={chartOptions} data={data.chartData} />
+    <Table data={data.tableData.data} columns={data.tableData.columns} />
+  </>
+);
 
 const ByRange = () => {
   const [rangeStart, setRangeStart] = useState("");
@@ -52,7 +66,10 @@ const ByRange = () => {
 
   const handleChangeRangeEnd = (event) => setRangeEnd(event.target.value);
 
-  const { data, error } = useSWR({rangeStart, rangeEnd, key: "tracks"}, fetcher);
+  const { data, error } = useSWR(
+    { rangeStart, rangeEnd, key: "tracks" },
+    fetcher
+  );
 
   return (
     <TrackLayout>
@@ -78,20 +95,7 @@ const ByRange = () => {
         />
       </label>
 
-      {
-        error ? (
-          <h3>Failed to load data</h3>
-        ) : (
-          data ? (
-            <>
-              <Bar options={chartOptions} data={data.chartData} />
-              <Table data={data.tableData.data} columns={data.tableData.columns} />
-            </>
-          ) : (
-            <h3>Loading...</h3>
-          )
-        )
-      }
+      <LoadedComponent data={data} error={error} component={DataComponent} />
     </TrackLayout>
   );
 };
