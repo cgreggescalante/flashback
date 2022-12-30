@@ -12,7 +12,7 @@ for i in range(9):
             play["ts"] = f"{date} {time[:-1]}"
             rows.append(play)
 
-with open('endsong.csv', 'w+', encoding="utf-8", newline='') as file:
+with open('play.csv', 'w+', encoding="utf-8", newline='') as file:
     writer = csv.DictWriter(file, fieldnames=[a for a in rows[0].keys()])
     writer.writeheader()
     for row in rows:
