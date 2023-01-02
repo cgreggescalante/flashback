@@ -5,5 +5,5 @@
 /packages/site/node_modules/
 /packages/site/.next/
 /packages/site/out/
-/lib/import/
 /.idea/
+/packages/site/.env
