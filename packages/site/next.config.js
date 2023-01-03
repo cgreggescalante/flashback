@@ -1,7 +1,7 @@
 /** @type {import("next").NextConfig} */
 
 module.exports = {
-  basePath: "/flashback",
-  assetPrefix: "/flashback/",
+  basePath: "",
+  assetPrefix: "/",
   reactStrictMode: true
 };
