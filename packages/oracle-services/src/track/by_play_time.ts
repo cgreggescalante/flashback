@@ -6,6 +6,13 @@ export const topTracks = async (
   range_start: string = "0001-01-01T00:00:00.00Z",
   range_end: string = "9999-01-01T00:00:00.00Z"
 ): Promise<Document[]> => {
+  if (!range_start) {
+    range_start = "0001-01-01T00:00:00.00Z"
+  }
+  if (!range_end) {
+    range_end = "9999-01-01T00:00:00.00Z"
+  }
+
   const options = {
     method: "GET"
   };

@@ -1,6 +1,6 @@
 import { Chart, registerables } from "chart.js";
 import { chartOptions, topArtistChart, topArtistTable } from "format-data";
-import { TOP_ARTISTS } from "oracle-services";
+import { topArtists } from "oracle-services";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
@@ -9,6 +9,7 @@ import { ArtistLayout } from "../../components/layout";
 import LoadedComponent from "../../components/loadedComponent";
 import Table from "../../components/table";
 import SelectDate from "../../components/selectDate";
+import { SWRConfig } from "swr/_internal";
 
 Chart.register(...registerables);
 
@@ -18,29 +19,11 @@ const fetcher = ({
 }: {
   rangeStart: string;
   rangeEnd: string;
-}) => {
-  const params = {
-    limit: "100"
-  };
-
-  if (rangeStart) {
-    params["range_start"] = rangeStart;
-  }
-
-  if (rangeEnd) {
-    params["range_end"] = rangeEnd;
-  }
-
-  const request = TOP_ARTISTS + new URLSearchParams(params);
-
-  return fetch(request)
-    .then((res) => res.json())
-    .then((data) => data.items)
-    .then((data) => ({
-      chartData: topArtistChart(data.slice(0, 10)),
-      tableData: topArtistTable(data)
-    }));
-};
+}) => topArtists(100, 0, rangeStart, rangeEnd)
+  .then(artists => ({
+    chartData: topArtistChart(artists.slice(0, 10)),
+    tableData: topArtistTable(artists)
+  }))
 
 const DataComponent = ({ data }) => (
   <>
@@ -68,4 +51,11 @@ const ByRange = () => {
   );
 };
 
-export default ByRange;
+export default () => (
+  <SWRConfig value={{
+    revalidateOnFocus: false,
+    fetcher: fetcher
+  }}>
+    <ByRange />
+  </SWRConfig>
+);
