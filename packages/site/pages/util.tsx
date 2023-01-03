@@ -20,10 +20,24 @@ const Util = () => {
       .then(res => console.log(res))
   }
 
+  const loadTracks = () => {
+    fetch("api/loadTracks")
+      .then(res => console.log(res))
+  }
+
+  const loadArtists = () => {
+    fetch("api/loadArtists")
+      .then(res => console.log(res))
+  }
+
   return (
     <>
       <input type="file" multiple={true} accept=".json" onChange={handleChange}/>
       <button onClick={loadPlays}>Load Plays</button>
+      <br />
+      <button onClick={loadTracks}>Load Tracks</button>
+      <br />
+      <button onClick={loadArtists}>Load Artists</button>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import { Chart, registerables } from "chart.js";
-import { topTrackChart, topTrackTable } from "format-data";
+import { chartOptions, topTrackChart, topTrackTable } from "format-data";
 import { TOP_TRACKS } from "oracle-services";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
@@ -8,18 +8,9 @@ import useSWR from "swr";
 import { TrackLayout } from "../../components/layout";
 import LoadedComponent from "../../components/loadedComponent";
 import Table from "../../components/table";
+import SelectDate from "../../components/selectDate";
 
 Chart.register(...registerables);
-
-const chartOptions = {
-  responsive: true,
-  plugins: {
-    title: {
-      display: true,
-      text: "Top Tracks"
-    }
-  }
-};
 
 const fetcher = ({
   rangeStart,
@@ -33,11 +24,11 @@ const fetcher = ({
   };
 
   if (rangeStart) {
-    params["range_start"] = `${rangeStart}T00:00:00.00Z`;
+    params["range_start"] = rangeStart;
   }
 
   if (rangeEnd) {
-    params["range_end"] = `${rangeEnd}T00:00:00.00Z`;
+    params["range_end"] = rangeEnd;
   }
 
   const request = TOP_TRACKS + new URLSearchParams(params);
@@ -53,7 +44,7 @@ const fetcher = ({
 
 const DataComponent = ({ data }) => (
   <>
-    <Bar options={chartOptions} data={data.chartData} />
+    <Bar options={chartOptions("Top Tracks")} data={data.chartData} />
     <Table data={data.tableData.data} columns={data.tableData.columns} />
   </>
 );
@@ -62,10 +53,6 @@ const ByRange = () => {
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
 
-  const handleChangeRangeStart = (event) => setRangeStart(event.target.value);
-
-  const handleChangeRangeEnd = (event) => setRangeEnd(event.target.value);
-
   const { data, error } = useSWR(
     { rangeStart, rangeEnd, key: "tracks" },
     fetcher
@@ -73,27 +60,8 @@ const ByRange = () => {
 
   return (
     <TrackLayout>
-      <label>
-        Start
-        <input
-          type="date"
-          id="range_start"
-          value={rangeStart}
-          onChange={handleChangeRangeStart}
-        />
-      </label>
-
-      <br />
-
-      <label>
-        End
-        <input
-          type="date"
-          id="range_end"
-          value={rangeEnd}
-          onChange={handleChangeRangeEnd}
-        />
-      </label>
+      Start <SelectDate setDate={setRangeStart} /> <br />
+      End <SelectDate setDate={setRangeEnd} />
 
       <LoadedComponent data={data} error={error} component={DataComponent} />
     </TrackLayout>

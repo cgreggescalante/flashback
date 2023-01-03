@@ -10,6 +10,7 @@ import listeningTimeMonthTable from "./src/listeningTime/month/table";
 import listeningTimeMonthChart from "./src/listeningTime/month/chart";
 import listeningTimeYearTable from "./src/listeningTime/year/table";
 import listeningTimeYearChart from "./src/listeningTime/year/chart";
+import chartOptions from "./src/chartOptions";
 
 export {
   topTrackTable,
@@ -24,4 +25,5 @@ export {
   listeningTimeMonthChart,
   listeningTimeYearTable,
   listeningTimeYearChart,
+  chartOptions
 };
