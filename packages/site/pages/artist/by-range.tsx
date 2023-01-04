@@ -6,7 +6,6 @@ import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 import { SWRConfig } from "swr/_internal";
 
-import { ArtistLayout } from "../../components/layout";
 import LoadedComponent from "../../components/loadedComponent";
 import SelectDate from "../../components/selectDate";
 import Table from "../../components/table";
@@ -39,11 +38,11 @@ const ByRange = () => {
   const { data, error } = useSWR({ rangeStart, rangeEnd, key: "artists" });
 
   return (
-    <ArtistLayout>
+    <>
       Start <SelectDate setDate={setRangeStart} /> <br />
       End <SelectDate setDate={setRangeEnd} /> <br />
       <LoadedComponent data={data} error={error} component={DataComponent} />
-    </ArtistLayout>
+    </>
   );
 };
 

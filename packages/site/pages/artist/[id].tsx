@@ -1,4 +1,4 @@
-import { ARTISTS, TOP_TRACKS } from "oracle-services";
+import { ARTISTS, getAllArtistIds, TOP_TRACKS } from "oracle-services";
 import useSWR from "swr";
 import LoadedComponent from "../../components/loadedComponent";
 import { useRouter } from "next/router";
@@ -8,6 +8,25 @@ import { chartOptions, topTrackChart, topTrackTable } from "format-data";
 import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);
+
+export const getStaticPaths = async () => {
+  const ids = await getAllArtistIds();
+
+  const paths = []
+
+  paths.push(...ids.map(id => ({
+      params: { id }
+  })))
+
+  return {
+    paths,
+    fallback: false
+  }
+}
+
+export const getStaticProps = async () => {
+  return { props: {} }
+}
 
 const fetchArtist = ({ id }: { id: string }) => {
   const request = ARTISTS + `id=${id}`
