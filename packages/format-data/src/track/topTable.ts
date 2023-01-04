@@ -20,8 +20,8 @@ const processElement = (track: any, index: number) => {
 const COLUMNS = [
   RANK_COLUMN,
   TRACK_NAME_COLUMN,
-  ARTIST_NAME_COLUMN,
   ALBUM_NAME_COLUMN,
+  ARTIST_NAME_COLUMN,
   MINUTES_PLAYED_COLUMN
 ];
 
