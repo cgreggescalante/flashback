@@ -1,4 +1,10 @@
-import { ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN, TRACK_NAME_COLUMN } from "../table_constants";
+import {
+  ALBUM_NAME_COLUMN,
+  ARTIST_NAME_COLUMN,
+  MINUTES_PLAYED_COLUMN,
+  RANK_COLUMN,
+  TRACK_NAME_COLUMN
+} from "../table_constants";
 import createTableFormat from "../createTableFormat";
 import { formatTableData } from "../../types";
 
@@ -15,6 +21,7 @@ const COLUMNS = [
   RANK_COLUMN,
   TRACK_NAME_COLUMN,
   ARTIST_NAME_COLUMN,
+  ALBUM_NAME_COLUMN,
   MINUTES_PLAYED_COLUMN
 ];
 

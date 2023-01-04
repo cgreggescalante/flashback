@@ -3,6 +3,11 @@ export const TRACK_NAME_COLUMN = {
   accessor: "track_name"
 };
 
+export const ALBUM_NAME_COLUMN = {
+  Header: "Album",
+  accessor: "album_name"
+};
+
 export const ARTIST_NAME_COLUMN = {
   Header: "Artist",
   accessor: "artist_name"
