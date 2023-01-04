@@ -3,15 +3,11 @@ import { TOP_ARTISTS } from "../uris";
 export const topArtists = async (
   limit: number = 10,
   page: number = 0,
-  range_start: string = "0001-01-01T00:00:00.00Z",
-  range_end: string = "9999-01-01T00:00:00.00Z"
+  rangeStart: string = "0001-01-01T00:00:00.00Z",
+  rangeEnd: string = "9999-01-01T00:00:00.00Z"
 ): Promise<Document[]> => {
-  if (!range_start) {
-    range_start = "0001-01-01T00:00:00.00Z"
-  }
-  if (!range_end) {
-    range_end = "9999-01-01T00:00:00.00Z"
-  }
+  rangeStart = rangeStart ? rangeStart : "0001-01-01T00:00:00.00Z"
+  rangeEnd = rangeEnd ? rangeEnd : "9999-01-01T00:00:00.00Z"
 
   const options = {
     method: "GET"
@@ -20,8 +16,8 @@ export const topArtists = async (
   const params = {
     "limit": limit.toString(),
     "offset": (page * limit).toString(),
-    "range_start": range_start,
-    "range_end": range_end
+    "range_start": rangeStart,
+    "range_end": rangeEnd
   };
 
   const url = TOP_ARTISTS + (new URLSearchParams(params));

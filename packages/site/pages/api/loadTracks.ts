@@ -1,5 +1,5 @@
-import { Connection } from "oracledb";
 import { createTrackIfNotExists } from "oracle-services";
+import { Connection } from "oracledb";
 
 const SpotifyWebApi = require("spotify-web-api-node");
 
@@ -11,50 +11,57 @@ try {
 } catch (err) {}
 
 export default async (req, res) => {
-  let connection: Connection
+  let connection: Connection;
 
   try {
-    connection = await oracledb.getConnection({ user: "admin", password: "EQqJ7Y9CKbCN2UL_", connectionString: "flashback_high" })
+    connection = await oracledb.getConnection({
+      user: "admin",
+      password: "EQqJ7Y9CKbCN2UL_",
+      connectionString: "flashback_high"
+    });
   } catch (err) {
-    res.json(err)
+    res.json(err);
   }
 
   try {
     await createTrackIfNotExists(connection);
   } catch (err) {
-    console.error(err)
-    res.json(err)
+    console.error(err);
+    res.json(err);
     return;
   }
 
   let track_ids;
 
   try {
-    track_ids = (await connection.execute("SELECT DISTINCT TRACK_ID FROM PLAY")).rows;
+    track_ids = (await connection.execute("SELECT DISTINCT TRACK_ID FROM PLAY"))
+      .rows;
 
-    console.log(`${track_ids.length} track ids found`)
+    console.log(`${track_ids.length} track ids found`);
 
     const spotifyApi = new SpotifyWebApi({
       clientId: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET
     });
 
-    await spotifyApi.clientCredentialsGrant()
-      .then(data => spotifyApi.setAccessToken(data.body['access_token']))
+    await spotifyApi
+      .clientCredentialsGrant()
+      .then((data) => spotifyApi.setAccessToken(data.body["access_token"]));
 
-    const raw_tracks = []
+    const raw_tracks = [];
 
-    let i = 0
+    let i = 0;
 
     while (i < track_ids.length) {
-      console.log(i)
-      await spotifyApi.getTracks(track_ids.slice(i, i + 50))
-        .then(data => raw_tracks.push(...data.body.tracks));
+      console.log(i);
+      await spotifyApi
+        .getTracks(track_ids.slice(i, i + 50))
+        .then((data) => raw_tracks.push(...data.body.tracks));
 
       i += 50;
     }
 
-    const tracks = raw_tracks.map(raw => ({
+    const tracks = raw_tracks.map((raw) => ({
       album_id: raw.album.id,
       artist_id: raw.artists[0].id,
       name: raw.name,
@@ -62,9 +69,10 @@ export default async (req, res) => {
       explicit: raw.explicit ? 1 : 0,
       popularity: raw.popularity,
       track_number: raw.track_number
-    }))
+    }));
 
-    const sql = "INSERT INTO TRACK (ID, NAME, ALBUM_ID, ARTIST_ID, EXPLICIT, POPULARITY, TRACK_NUMBER) VALUES (:id, :name, :album_id, :artist_id, :explicit, :popularity, :track_number)"
+    const sql =
+      "INSERT INTO TRACK (ID, NAME, ALBUM_ID, ARTIST_ID, EXPLICIT, POPULARITY, TRACK_NUMBER) VALUES (:id, :name, :album_id, :artist_id, :explicit, :popularity, :track_number)";
 
     const options = {
       autoCommit: true,
@@ -77,19 +85,18 @@ export default async (req, res) => {
         popularity: { type: oracledb.NUMBER },
         track_number: { type: oracledb.NUMBER }
       }
-    }
+    };
 
     const result = await connection.executeMany(sql, tracks, options);
 
     console.log(result.rowsAffected);
 
-    res.json({})
+    res.json({});
   } catch (err) {
-    console.log(err)
-    res.json(err.error)
+    console.log(err);
+    res.json(err.error);
   }
-}
-
+};
 
 //
 //     const tracks = raw_tracks.map(raw => ({

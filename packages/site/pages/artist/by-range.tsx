@@ -4,12 +4,12 @@ import { topArtists } from "oracle-services";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
+import { SWRConfig } from "swr/_internal";
 
 import { ArtistLayout } from "../../components/layout";
 import LoadedComponent from "../../components/loadedComponent";
-import Table from "../../components/table";
 import SelectDate from "../../components/selectDate";
-import { SWRConfig } from "swr/_internal";
+import Table from "../../components/table";
 
 Chart.register(...registerables);
 
@@ -19,11 +19,11 @@ const fetcher = ({
 }: {
   rangeStart: string;
   rangeEnd: string;
-}) => topArtists(100, 0, rangeStart, rangeEnd)
-  .then(artists => ({
+}) =>
+  topArtists(100, 0, rangeStart, rangeEnd).then((artists) => ({
     chartData: topArtistChart(artists.slice(0, 10)),
     tableData: topArtistTable(artists)
-  }))
+  }));
 
 const DataComponent = ({ data }) => (
   <>
@@ -36,26 +36,24 @@ const ByRange = () => {
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
 
-  const { data, error } = useSWR(
-    { rangeStart, rangeEnd, key: "artists" },
-    fetcher
-  );
+  const { data, error } = useSWR({ rangeStart, rangeEnd, key: "artists" });
 
   return (
     <ArtistLayout>
       Start <SelectDate setDate={setRangeStart} /> <br />
       End <SelectDate setDate={setRangeEnd} /> <br />
-
       <LoadedComponent data={data} error={error} component={DataComponent} />
     </ArtistLayout>
   );
 };
 
 export default () => (
-  <SWRConfig value={{
-    revalidateOnFocus: false,
-    fetcher: fetcher
-  }}>
+  <SWRConfig
+    value={{
+      revalidateOnFocus: false,
+      fetcher: fetcher
+    }}
+  >
     <ByRange />
   </SWRConfig>
 );

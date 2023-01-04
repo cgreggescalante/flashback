@@ -38,21 +38,26 @@ export default async (req, res) => {
   let connection;
 
   try {
-    connection = await oracledb.getConnection({ user: "admin", password: "EQqJ7Y9CKbCN2UL_", connectionString: "flashback_high" })
+    connection = await oracledb.getConnection({
+      user: "admin",
+      password: "EQqJ7Y9CKbCN2UL_",
+      connectionString: "flashback_high"
+    });
   } catch (err) {
-    res.error(err)
+    res.error(err);
   }
 
   try {
     await createPlayIfNotExists(connection);
   } catch (err) {
     console.error(err);
-    res.status(500).json({})
+    res.status(500).json({});
   }
 
   // Add entries to PLAY
   try {
-    const sql = "INSERT INTO PLAY (TS, USERNAME, PLATFORM, MS_PLAYED, CONN_COUNTRY, IP_ADDR_DECRYPTED, USER_AGENT_DECRYPTED, TRACK_NAME, ARTIST_NAME, ALBUM_NAME, TRACK_ID, REASON_START, REASON_END, SHUFFLE, OFFLINE_MODE, OFFLINE_TIMESTAMP, INCOGNITO_MODE) VALUES (:ts, :username, :platform, :ms_played, :conn_country, :ip_addr_decrypted, :user_agent_decrypted, :track_name, :artist_name, :album_name, :track_id, :reason_start, :reason_end, :shuffle, :offline_mode, :offline_timestamp, :incognito_mode)"
+    const sql =
+      "INSERT INTO PLAY (TS, USERNAME, PLATFORM, MS_PLAYED, CONN_COUNTRY, IP_ADDR_DECRYPTED, USER_AGENT_DECRYPTED, TRACK_NAME, ARTIST_NAME, ALBUM_NAME, TRACK_ID, REASON_START, REASON_END, SHUFFLE, OFFLINE_MODE, OFFLINE_TIMESTAMP, INCOGNITO_MODE) VALUES (:ts, :username, :platform, :ms_played, :conn_country, :ip_addr_decrypted, :user_agent_decrypted, :track_name, :artist_name, :album_name, :track_id, :reason_start, :reason_end, :shuffle, :offline_mode, :offline_timestamp, :incognito_mode)";
 
     const options = {
       autoCommit: true,
@@ -65,7 +70,7 @@ export default async (req, res) => {
         ip_addr_decrypted: { type: oracledb.STRING, maxSize: 128 },
         user_agent_decrypted: { type: oracledb.STRING, maxSize: 256 },
         track_name: { type: oracledb.STRING, maxSize: 256 },
-        artist_name: { type: oracledb.STRING, maxSize: 256},
+        artist_name: { type: oracledb.STRING, maxSize: 256 },
         album_name: { type: oracledb.STRING, maxSize: 256 },
         track_id: { type: oracledb.STRING, maxSize: 256 },
         reason_start: { type: oracledb.STRING, maxSize: 128 },
@@ -73,22 +78,27 @@ export default async (req, res) => {
         shuffle: { type: oracledb.NUMBER },
         offline_mode: { type: oracledb.NUMBER },
         offline_timestamp: { type: oracledb.NUMBER },
-        incognito_mode: { type: oracledb.NUMBER },
+        incognito_mode: { type: oracledb.NUMBER }
       }
-    }
+    };
 
-    plays.forEach(play => {
-      play["track_id"] = play["spotify_track_uri"].split(":")[2]
+    plays.forEach((play) => {
+      play["track_id"] = play["spotify_track_uri"].split(":")[2];
       play["track_name"] = play["master_metadata_track_name"];
       play["artist_name"] = play["master_metadata_album_artist_name"];
       play["album_name"] = play["master_metadata_album_album_name"];
       play["offline_mode"] = play["offline"] ? 1 : 0;
       play["shuffle"] = play["shuffle"] ? 1 : 0;
       play["incognito_mode"] = play["incognito_mode"] ? 1 : 0;
-      play["ts"] = `${play["ts"].substring(0, 10)} ${play["ts"].substring(11, 19)}`
+      play["ts"] = `${play["ts"].substring(0, 10)} ${play["ts"].substring(
+        11,
+        19
+      )}`;
     });
 
-    await connection.execute("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS'");
+    await connection.execute(
+      "ALTER SESSION SET NLS_TIMESTAMP_FORMAT = 'YYYY-MM-DD HH24:MI:SS'"
+    );
 
     const result = await connection.executeMany(sql, plays, options);
 
