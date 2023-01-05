@@ -29,6 +29,10 @@ const Util = () => {
     fetch("api/loadArtists").then((res) => console.log(res));
   };
 
+  const loadGenres = () => {
+    fetch("api/loadGenres").then((res) => console.log(res));
+  };
+
   return (
     <>
       <input
@@ -42,6 +46,8 @@ const Util = () => {
       <button onClick={loadTracks}>Load Tracks</button>
       <br />
       <button onClick={loadArtists}>Load Artists</button>
+      <br />
+      <button onClick={loadGenres}>Load Genres</button>
     </>
   );
 };

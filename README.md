@@ -12,5 +12,6 @@
 - [x] Select year with dropdown
 - [x] Custom date ranges
 
-
-Sometime between 2022-11-26T03:04:08Z and 2022-11-20T17:46:20Z, the ID for STRFKR's album 'Miracle Mile' was changed, along with those of all of its tracks.
+These albums had their Ids changed
+Miracle Mile - STRFKR - 2022-11-26T03:04:08Z, 2022-11-20T17:46:20Z
+Expert In A Dying Field - The Beths - 2022-11-01T15:12:51Z, 2022-08-13T21:56:06Z

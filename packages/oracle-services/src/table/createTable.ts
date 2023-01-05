@@ -23,3 +23,11 @@ export const createArtistIfNotExists = async (connection: Connection) => {
     await connection.execute("CREATE TABLE ARTIST (NAME VARCHAR2(256), ID VARCHAR2(256), POPULARITY NUMBER, FOLLOWERS NUMBER)")
   }
 }
+
+export const createGenreIfNotExists = async (connection: Connection) => {
+  try {
+    await connection.execute("SELECT * FROM GENRE FETCH FIRST 1 ROWS ONLY");
+  } catch {
+    await connection.execute("CREATE TABLE GENRE (NAME VARCHAR2(256), ARTIST_ID VARCHAR2(256))")
+  }
+}

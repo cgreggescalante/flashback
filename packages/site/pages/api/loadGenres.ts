@@ -1,4 +1,4 @@
-import { createArtistIfNotExists } from "oracle-services";
+import { createGenreIfNotExists } from "oracle-services";
 import { Connection } from "oracledb";
 
 const SpotifyWebApi = require("spotify-web-api-node");
@@ -24,7 +24,7 @@ export default async (req, res) => {
   }
 
   try {
-    await createArtistIfNotExists(connection);
+    await createGenreIfNotExists(connection);
   } catch (err) {
     console.error(err);
     res.json(err);
@@ -35,7 +35,7 @@ export default async (req, res) => {
 
   try {
     artist_ids = (
-      await connection.execute("SELECT DISTINCT ARTIST_ID FROM TRACK")
+      await connection.execute("SELECT ID FROM ARTIST")
     ).rows;
 
     console.log(`${artist_ids.length} artist ids found`);
@@ -54,7 +54,6 @@ export default async (req, res) => {
     let i = 0;
 
     while (i < artist_ids.length) {
-      console.log(i);
       await spotifyApi
         .getArtists(artist_ids.slice(i, i + 50))
         .then((data) => raw_artists.push(...data.body.artists));
@@ -62,27 +61,27 @@ export default async (req, res) => {
       i += 50;
     }
 
-    const artists = raw_artists.map((raw) => ({
-      followers: raw.followers.total,
-      id: raw.id,
-      name: raw.name,
-      popularity: raw.popularity
-    }));
+    const genres = []
+
+    raw_artists.forEach(artist => {
+      genres.push(...artist.genres.map(genre => ({
+        artist_id: artist.id,
+        name: genre
+      })))
+    })
 
     const sql =
-      "INSERT INTO ARTIST (ID, NAME, FOLLOWERS, POPULARITY) VALUES (:id, :name, :followers, :popularity)";
+      "INSERT INTO GENRE (NAME, ARTIST_ID) VALUES (:name, :artist_id)";
 
     const options = {
       autoCommit: true,
       bindDefs: {
-        id: { type: oracledb.STRING, maxSize: 256 },
         name: { type: oracledb.STRING, maxSize: 256 },
-        popularity: { type: oracledb.NUMBER },
-        followers: { type: oracledb.NUMBER }
+        artist_id: { type: oracledb.STRING, maxSize: 256 },
       }
     };
 
-    const result = await connection.executeMany(sql, artists, options);
+    const result = await connection.executeMany(sql, genres, options);
 
     console.log(result.rowsAffected);
 

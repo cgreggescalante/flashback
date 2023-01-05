@@ -1,6 +1,11 @@
 import { topTracks, topTracksByYear } from "./src/track/by_play_time";
 import { topArtists, topArtistsByYear } from "./src/artist/by_play_time";
-import { createArtistIfNotExists, createPlayIfNotExists, createTrackIfNotExists } from "./src/table/createTable";
+import {
+  createArtistIfNotExists,
+  createGenreIfNotExists,
+  createPlayIfNotExists,
+  createTrackIfNotExists
+} from "./src/table/createTable";
 import getAllArtistIds from "./src/artist/getIds";
 import { ARTISTS, INSIGHTS, LISTENING_TIME, TOP_ARTISTS, TOP_TRACKS } from "./src/uris";
 
@@ -12,6 +17,7 @@ export {
   createPlayIfNotExists,
   createTrackIfNotExists,
   createArtistIfNotExists,
+  createGenreIfNotExists,
   getAllArtistIds,
   TOP_TRACKS,
   ARTISTS,
