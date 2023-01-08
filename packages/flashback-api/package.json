@@ -1,0 +1,8 @@
+{
+  "name": "flashback-api",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build flashback-api": "tsc index.ts --watch --esModuleInterop --outDir dist"
+  }
+}

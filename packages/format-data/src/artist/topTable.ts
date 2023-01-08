@@ -1,4 +1,4 @@
-import { ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN } from "../table_constants";
+import { ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN } from "../tableConstants";
 import createTableFormat from "../createTableFormat";
 import { formatTableData } from "../../types";
 

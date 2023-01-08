@@ -1,6 +1,6 @@
 import { formatTableData } from "../../../types";
 import createTableFormat from "../../createTableFormat";
-import { MINUTES_PLAYED_COLUMN, MONTH_COLUMN, YEAR_COLUMN } from "../../table_constants";
+import { MINUTES_PLAYED_COLUMN, MONTH_COLUMN, YEAR_COLUMN } from "../../tableConstants";
 
 const processElement = (month: any) => ({
   year: month.year_month.split("-")[0],

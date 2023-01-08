@@ -1,15 +1,5 @@
 import { Chart, registerables } from "chart.js";
-import {
-  listeningTimeDayChart,
-  listeningTimeDayTable,
-  listeningTimeMonthChart,
-  listeningTimeMonthTable,
-  listeningTimeWeekChart,
-  listeningTimeWeekTable,
-  listeningTimeYearChart,
-  listeningTimeYearTable
-} from "format-data";
-import { INSIGHTS, LISTENING_TIME } from "oracle-services";
+import { fetchInsights, fetchTableAndChart, INSIGHTS } from "oracle-services";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
@@ -27,58 +17,6 @@ const chartOptions = {
       text: "Listening Time"
     }
   }
-};
-
-const resolutionConfig = {
-  day: {
-    offset: 73,
-    formatChart: listeningTimeDayChart,
-    formatTable: listeningTimeDayTable
-  },
-  week: {
-    offset: 52,
-    formatChart: listeningTimeWeekChart,
-    formatTable: listeningTimeWeekTable
-  },
-  month: {
-    offset: 12,
-    formatChart: listeningTimeMonthChart,
-    formatTable: listeningTimeMonthTable
-  },
-  year: {
-    offset: 0,
-    formatChart: listeningTimeYearChart,
-    formatTable: listeningTimeYearTable
-  }
-};
-
-const fetchTableAndChart = ({
-  resolution,
-  pageIndex
-}: {
-  resolution: string;
-  pageIndex: number;
-}) => {
-  let formatChartData = resolutionConfig[resolution].formatChart;
-  let formatTableData = resolutionConfig[resolution].formatTable;
-
-  const url = `${LISTENING_TIME}${resolution}?offset=${
-    pageIndex * resolutionConfig[resolution].offset
-  }`;
-
-  return fetch(url)
-    .then((res) => res.json())
-    .then((data) => data.items)
-    .then((data) => ({
-      chartData: formatChartData(data),
-      tableData: formatTableData(data)
-    }));
-};
-
-const fetchInsights = () => {
-  return fetch(INSIGHTS)
-    .then((res) => res.json())
-    .then((data) => data.items[0]);
 };
 
 const msToHoursMinutesSeconds = (ms: number) => {
@@ -108,7 +46,7 @@ const InsightsComponent = ({ data }) => (
   </>
 );
 
-const ChartComponent = ({ data }) => (
+const TableChartComponent = ({ data }) => (
   <>
     <Bar options={chartOptions} data={data.chartData} />
     <Table data={data.tableData.data} columns={data.tableData.columns} />
@@ -124,7 +62,7 @@ const ListeningTime = () => {
     setPageIndex(0);
   };
 
-  const { data, error } = useSWR(
+  const tableChart = useSWR(
     {
       resolution,
       pageIndex
@@ -161,7 +99,7 @@ const ListeningTime = () => {
       </button>
       <button onClick={() => setPageIndex(pageIndex + 1)}>{">"}</button>
       <br />
-      <LoadedComponent data={data} error={error} component={ChartComponent} />
+      <LoadedComponent data={tableChart.data} error={tableChart.error} component={TableChartComponent} />
     </>
   );
 };

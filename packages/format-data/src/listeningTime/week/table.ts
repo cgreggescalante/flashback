@@ -1,4 +1,4 @@
-import { MINUTES_PLAYED_COLUMN, WEEK_COLUMN, YEAR_COLUMN } from "../../table_constants";
+import { MINUTES_PLAYED_COLUMN, WEEK_COLUMN, YEAR_COLUMN } from "../../tableConstants";
 import createTableFormat from "../../createTableFormat";
 import { formatTableData } from "../../../types";
 

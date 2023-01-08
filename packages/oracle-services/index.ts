@@ -6,7 +6,7 @@ import {
   createPlayIfNotExists,
   createTrackIfNotExists
 } from "./src/table/createTable";
-import getAllArtistIds from "./src/artist/getIds";
+import { fetchInsights, fetchTableAndChart } from "./src/listeningTime/listeningTime";
 import { ARTISTS, INSIGHTS, LISTENING_TIME, TOP_ARTISTS, TOP_TRACKS } from "./src/uris";
 
 export {
@@ -18,7 +18,8 @@ export {
   createTrackIfNotExists,
   createArtistIfNotExists,
   createGenreIfNotExists,
-  getAllArtistIds,
+  fetchInsights,
+  fetchTableAndChart,
   TOP_TRACKS,
   ARTISTS,
   TOP_ARTISTS,

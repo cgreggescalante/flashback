@@ -1,4 +1,4 @@
-import { ARTISTS, getAllArtistIds, TOP_TRACKS } from "oracle-services";
+import { ARTISTS, TOP_TRACKS } from "oracle-services";
 import useSWR from "swr";
 import LoadedComponent from "../../components/loadedComponent";
 import { useRouter } from "next/router";
@@ -6,11 +6,12 @@ import { Bar } from "react-chartjs-2";
 import Table from "../../components/table";
 import { chartOptions, topTrackChart, topTrackTable } from "format-data";
 import { Chart, registerables } from "chart.js";
+import { artistGetAllIds } from "flashback-api";
 
 Chart.register(...registerables);
 
 export const getStaticPaths = async () => {
-  const ids = await getAllArtistIds();
+  const ids = await artistGetAllIds();
 
   const paths = []
 

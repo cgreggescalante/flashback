@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "build services": "tsc index.ts --watch --outDir dist"
-  },
-  "dependencies": {
-    "mongodb": "^4.13.0"
+    "build services": "tsc index.ts --watch --jsx react-jsx --outDir dist"
   }
 }

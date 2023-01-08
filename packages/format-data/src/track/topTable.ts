@@ -4,7 +4,7 @@ import {
   MINUTES_PLAYED_COLUMN,
   RANK_COLUMN,
   TRACK_NAME_COLUMN
-} from "../table_constants";
+} from "../tableConstants";
 import createTableFormat from "../createTableFormat";
 import { formatTableData } from "../../types";
 
