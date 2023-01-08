@@ -24,41 +24,29 @@ for (let i = 0; i < 12; i++) {
 }
 
 const SelectDate = ({ setDate }) => {
-  const [year, setYear] = useState('2019')
-  const [month, setMonth] = useState('01')
-  const [day, setDay] = useState('01')
+  const [year, setYear] = useState(2019)
+  const [month, setMonth] = useState(0)
+  const [day, setDay] = useState(1)
 
   const [dayCount, setDayCount] = useState(month_days[0])
 
   const handleYear = (event) => {
     setYear(event.target.value)
 
-    setDate(`${event.target.value}-${month}-${day}T00:00:00.00Z`)
+    setDate(new Date(event.target.value, month, day))
   }
 
   const handleMonth = (event) => {
-    let value = event.target.value.toString();
-
-    if (value.length < 2) {
-      value = '0' + value
-    }
-
-    setMonth(value)
+    setMonth(event.target.value)
     setDayCount(month_days[event.target.value - 1])
 
-    setDate(`${year}-${value}-${day}T00:00:00.00Z`)
+    setDate(new Date(year, event.target.value, day))
   }
 
   const handleDay = (event) => {
-    let value = event.target.value.toString();
+    setDay(event.target.value)
 
-    if (value.length < 2) {
-      value = '0' + value
-    }
-
-    setDay(value)
-
-    setDate(`${year}-${month}-${value}T00:00:00.00Z`)
+    setDate(new Date(year, month, event.target.value))
   }
 
   return (
@@ -73,7 +61,7 @@ const SelectDate = ({ setDate }) => {
       <select onChange={handleMonth}>
         {
           months.map((month, index) => (
-            <option key={index} value={index + 1}>{month}</option>
+            <option key={index} value={index}>{month}</option>
           ))
         }
       </select>

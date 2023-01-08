@@ -8,8 +8,7 @@ import { SWRConfig } from "swr/_internal";
 import LoadedComponent from "../../components/loadedComponent";
 import SelectDate from "../../components/selectDate";
 import Table from "../../components/table";
-import { topArtists } from "oracle-services";
-import { artistGetIds } from "flashback-api";
+import { artistGetByPlayTime } from "flashback-api";
 
 Chart.register(...registerables);
 
@@ -17,11 +16,10 @@ const fetcher = ({
   rangeStart,
   rangeEnd
 }: {
-  rangeStart: string;
-  rangeEnd: string;
+  rangeStart: Date;
+  rangeEnd: Date;
 }) => {
-  artistGetIds(10, 1);
-  return topArtists(100, 0, rangeStart, rangeEnd).then((artists) => ({
+  return artistGetByPlayTime(0, 100, rangeStart, rangeEnd).then((artists) => ({
     chartData: topArtistChart(artists.slice(0, 10)),
     tableData: topArtistTable(artists)
   }));
@@ -36,8 +34,8 @@ const DataComponent = ({ data }) => (
 );
 
 const ByRange = () => {
-  const [rangeStart, setRangeStart] = useState("");
-  const [rangeEnd, setRangeEnd] = useState("");
+  const [rangeStart, setRangeStart] = useState(new Date(0, 0));
+  const [rangeEnd, setRangeEnd] = useState(new Date(9999, 0));
 
   const { data, error } = useSWR({ rangeStart, rangeEnd, key: "artists" });
 

@@ -1,6 +1,7 @@
-import { artistGetAllIds, artistGetIds } from "./src/api";
+import { artistGetAllIds, artistGetByPlayTime, artistGetIds } from "./src/api";
 
 export {
   artistGetIds,
-  artistGetAllIds
+  artistGetAllIds,
+  artistGetByPlayTime
 }
