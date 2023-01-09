@@ -1,6 +1,6 @@
-import { ARTIST_NAME_COLUMN, MINUTES_PLAYED_COLUMN, RANK_COLUMN } from "../tableConstants";
-import createTableFormat from "../createTableFormat";
-import { formatTableData } from "../../types";
+import createTableFormat from "./createTableFormat";
+import { formatTableData } from "../types";
+import { TableColumns } from "./tableConstants";
 
 const processElement = (artist: any, index: number) => {
   artist.value = Math.floor(artist.total_ms_played / 1000 / 60);
@@ -11,9 +11,9 @@ const processElement = (artist: any, index: number) => {
 };
 
 const COLUMNS = [
-  RANK_COLUMN,
-  ARTIST_NAME_COLUMN,
-  MINUTES_PLAYED_COLUMN
+  TableColumns.RANK,
+  TableColumns.ARTIST_NAME,
+  TableColumns.MINUTES_PLAYED
 ];
 
 const formatTopArtistsTable: formatTableData = createTableFormat(processElement, COLUMNS);
