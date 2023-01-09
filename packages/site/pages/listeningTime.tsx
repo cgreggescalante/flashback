@@ -22,22 +22,18 @@ Chart.register(...registerables);
 
 const resolutionConfig = [
   {
-    offset: 73,
     formatChart: listeningTimeDayChart,
     formatTable: listeningTimeDayTable
   },
   {
-    offset: 52,
     formatChart: listeningTimeWeekChart,
     formatTable: listeningTimeWeekTable
   },
   {
-    offset: 12,
     formatChart: listeningTimeMonthChart,
     formatTable: listeningTimeMonthTable
   },
   {
-    offset: 0,
     formatChart: listeningTimeYearChart,
     formatTable: listeningTimeYearTable
   }
@@ -93,22 +89,22 @@ const fetchInsights = async () =>
 
 const fetchListeningTime = async ({ resolution, pageIndex }) => {
   let promise: Promise<any>;
-  let { offset, formatChart, formatTable} = resolutionConfig[resolution];
+  let { formatChart, formatTable} = resolutionConfig[resolution];
 
   switch (resolution) {
     case 0: {
-      promise = ListeningTimeAPI.daily(pageIndex * offset, offset);
+      promise = ListeningTimeAPI.daily(pageIndex);
       break;
     }
     case 1: {
-      promise = ListeningTimeAPI.weekly(pageIndex * offset, offset);
+      promise = ListeningTimeAPI.weekly(pageIndex);
       break;
     }
     case 2: {
-      promise = ListeningTimeAPI.monthly(pageIndex * offset, offset);
+      promise = ListeningTimeAPI.monthly(pageIndex);
       break;
     }
-    case 3: promise = ListeningTimeAPI.yearly(0, 100);
+    case 3: promise = ListeningTimeAPI.yearly(0);
   }
 
   return await promise.then(data => ({
