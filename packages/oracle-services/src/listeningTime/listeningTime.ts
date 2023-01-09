@@ -10,13 +10,6 @@ import {
   listeningTimeYearTable
 } from "format-data";
 
-const enum TimeSpan {
-  DAY,
-  WEEK,
-  MONTH,
-  YEAR
-}
-
 const resolutionConfig = [
   {
     offset: 73,
@@ -44,13 +37,15 @@ export const fetchTableAndChart = ({
   resolution,
   pageIndex
 }: {
-  resolution: TimeSpan;
+  resolution: number;
   pageIndex: number;
 }) => {
   let formatChartData = resolutionConfig[resolution].formatChart;
   let formatTableData = resolutionConfig[resolution].formatTable;
 
-  const url = `${LISTENING_TIME}${resolution}?offset=${
+  let resolutionString = ["day", "week", "month", "year"][resolution]
+
+  const url = `${LISTENING_TIME}${resolutionString}?offset=${
     pageIndex * resolutionConfig[resolution].offset
   }`;
 

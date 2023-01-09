@@ -1,11 +1,12 @@
 import { Chart, registerables } from "chart.js";
-import { fetchInsights, fetchTableAndChart, INSIGHTS } from "oracle-services";
+import { fetchTableAndChart, INSIGHTS } from "oracle-services";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 
 import LoadedComponent from "../components/loadedComponent";
 import Table from "../components/table";
+import { InsightAPI } from "flashback-api";
 
 Chart.register(...registerables);
 
@@ -34,17 +35,28 @@ const msToHoursMinutesSeconds = (ms: number) => {
 
 const InsightsComponent = ({ data }) => (
   <>
-    Yearly Max: {msToHoursMinutesSeconds(data.yearly_max)} <br />
-    Yearly Average: {msToHoursMinutesSeconds(data.yearly_average)} <br /> <br />
-    Monthly Max: {msToHoursMinutesSeconds(data.monthly_max)} <br />
-    Monthly Average: {msToHoursMinutesSeconds(data.monthly_average)} <br />{" "}
+    Yearly Max: {msToHoursMinutesSeconds(data.yearly.maximum)} <br />
+    Yearly Average: {msToHoursMinutesSeconds(data.yearly.average)} <br />
     <br />
-    Weekly Max: {msToHoursMinutesSeconds(data.weekly_max)} <br />
-    Weekly Average: {msToHoursMinutesSeconds(data.weekly_average)} <br /> <br />
-    Daily Max: {msToHoursMinutesSeconds(data.daily_max)} <br />
-    Daily Average: {msToHoursMinutesSeconds(data.daily_average)}
+    Monthly Max: {msToHoursMinutesSeconds(data.monthly.maximum)} <br />
+    Monthly Average: {msToHoursMinutesSeconds(data.monthly.average)} <br />
+    <br />
+    Weekly Max: {msToHoursMinutesSeconds(data.weekly.maximum)} <br />
+    Weekly Average: {msToHoursMinutesSeconds(data.weekly.average)} <br />
+    <br />
+    Daily Max: {msToHoursMinutesSeconds(data.daily.maximum)} <br />
+    Daily Average: {msToHoursMinutesSeconds(data.daily.average)}
   </>
 );
+
+const fetchInsights = async () =>
+  await Promise.all([InsightAPI.getDaily(), InsightAPI.getWeekly(), InsightAPI.getMonthly(), InsightAPI.getYearly()])
+    .then(values => ({
+      daily: values[0][0],
+      weekly: values[1][0],
+      monthly: values[2][0],
+      yearly: values[3][0]
+    }));
 
 const TableChartComponent = ({ data }) => (
   <>
@@ -54,7 +66,7 @@ const TableChartComponent = ({ data }) => (
 );
 
 const ListeningTime = () => {
-  const [resolution, setResolution] = useState("week");
+  const [resolution, setResolution] = useState(1);
   const [pageIndex, setPageIndex] = useState(0);
 
   const handleChangeResolution = (event) => {
@@ -84,10 +96,10 @@ const ListeningTime = () => {
       <label>
         Resolution
         <select value={resolution} onChange={handleChangeResolution}>
-          <option value="day">Day</option>
-          <option value="week">Week</option>
-          <option value="month">Month</option>
-          <option value="year">Year</option>
+          <option value={0}>Day</option>
+          <option value={1}>Week</option>
+          <option value={2}>Month</option>
+          <option value={3}>Year</option>
         </select>
       </label>
       <br />
