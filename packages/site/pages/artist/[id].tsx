@@ -11,7 +11,7 @@ import { ArtistAPI } from "flashback-api";
 Chart.register(...registerables);
 
 export const getStaticPaths = async () => {
-  const ids = await ArtistAPI.artistGetAllIds();
+  const ids = await ArtistAPI.getAllIds();
 
   const paths = []
 

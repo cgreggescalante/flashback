@@ -19,7 +19,7 @@ const fetcher = ({
   rangeStart: Date;
   rangeEnd: Date;
 }) =>
-  TrackAPI.trackGetByPlayTime(0, 100, rangeStart, rangeEnd).then((tracks) => ({
+  TrackAPI.getByPlayTime(0, 100, rangeStart, rangeEnd).then((tracks) => ({
     chartData: topTrackChart(tracks.slice(0, 10)),
     tableData: topTrackTable(tracks)
   }));

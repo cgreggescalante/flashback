@@ -18,7 +18,7 @@ const fetcher = ({
 }: {
   rangeStart: Date;
   rangeEnd: Date;
-}) => ArtistAPI.artistGetByPlayTime(0, 100, rangeStart, rangeEnd).then((artists) => ({
+}) => ArtistAPI.getByPlayTime(0, 100, rangeStart, rangeEnd).then((artists) => ({
     chartData: topArtistChart(artists.slice(0, 10)),
     tableData: topArtistTable(artists)
   }));

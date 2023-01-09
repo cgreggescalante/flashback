@@ -1,7 +1,7 @@
 import { dateToTimestamp, postStatementJSON } from "./utils";
 
 export class ArtistAPI {
-  static artistGetIds = async (
+  static getIds = async (
     limit: number,
     offset: number
   ): Promise<string[]> => {
@@ -12,13 +12,13 @@ export class ArtistAPI {
     });
   };
 
-  static artistGetAllIds = async (): Promise<string[]> => {
+  static getAllIds = async (): Promise<string[]> => {
     const limit = 1000;
     let offset = 0;
     const ids = [];
 
     while (true) {
-      const result = await ArtistAPI.artistGetIds(limit, offset);
+      const result = await ArtistAPI.getIds(limit, offset);
       if (result.length == 0) {
         break;
       }
@@ -28,7 +28,7 @@ export class ArtistAPI {
     return ids;
   };
 
-  static artistGetByPlayTime = async (
+  static getByPlayTime = async (
     offset: number = 0,
     limit: number = 100,
     rangeStart?: Date,

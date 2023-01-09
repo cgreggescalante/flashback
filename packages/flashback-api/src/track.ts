@@ -1,7 +1,7 @@
 import { dateToTimestamp, postStatementJSON } from "./utils";
 
 export class TrackAPI {
-  static trackGetByPlayTime = async (
+  static getByPlayTime = async (
     offset: number = 0,
     limit: number = 100,
     rangeStart?: Date,
