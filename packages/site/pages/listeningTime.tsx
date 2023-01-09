@@ -1,14 +1,47 @@
 import { Chart, registerables } from "chart.js";
-import { fetchTableAndChart, INSIGHTS } from "oracle-services";
+import { INSIGHTS } from "oracle-services";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
 
 import LoadedComponent from "../components/loadedComponent";
 import Table from "../components/table";
-import { InsightAPI } from "flashback-api";
+import { InsightAPI, ListeningTimeAPI } from "flashback-api";
+import {
+  listeningTimeDayChart,
+  listeningTimeDayTable,
+  listeningTimeMonthChart,
+  listeningTimeMonthTable,
+  listeningTimeWeekChart,
+  listeningTimeWeekTable,
+  listeningTimeYearChart,
+  listeningTimeYearTable
+} from "format-data";
 
 Chart.register(...registerables);
+
+const resolutionConfig = [
+  {
+    offset: 73,
+    formatChart: listeningTimeDayChart,
+    formatTable: listeningTimeDayTable
+  },
+  {
+    offset: 52,
+    formatChart: listeningTimeWeekChart,
+    formatTable: listeningTimeWeekTable
+  },
+  {
+    offset: 12,
+    formatChart: listeningTimeMonthChart,
+    formatTable: listeningTimeMonthTable
+  },
+  {
+    offset: 0,
+    formatChart: listeningTimeYearChart,
+    formatTable: listeningTimeYearTable
+  }
+];
 
 const chartOptions = {
   responsive: true,
@@ -58,6 +91,32 @@ const fetchInsights = async () =>
       yearly: values[3][0]
     }));
 
+const fetchListeningTime = async ({ resolution, pageIndex }) => {
+  let promise: Promise<any>;
+  let { offset, formatChart, formatTable} = resolutionConfig[resolution];
+
+  switch (resolution) {
+    case 0: {
+      promise = ListeningTimeAPI.daily(pageIndex * offset, offset);
+      break;
+    }
+    case 1: {
+      promise = ListeningTimeAPI.weekly(pageIndex * offset, offset);
+      break;
+    }
+    case 2: {
+      promise = ListeningTimeAPI.monthly(pageIndex * offset, offset);
+      break;
+    }
+    case 3: promise = ListeningTimeAPI.yearly(0, 100);
+  }
+
+  return await promise.then(data => ({
+    chartData: formatChart(data),
+    tableData: formatTable(data)
+  }))
+}
+
 const TableChartComponent = ({ data }) => (
   <>
     <Bar options={chartOptions} data={data.chartData} />
@@ -70,7 +129,7 @@ const ListeningTime = () => {
   const [pageIndex, setPageIndex] = useState(0);
 
   const handleChangeResolution = (event) => {
-    setResolution(event.target.value);
+    setResolution(Number.parseInt(event.target.value));
     setPageIndex(0);
   };
 
@@ -79,7 +138,7 @@ const ListeningTime = () => {
       resolution,
       pageIndex
     },
-    fetchTableAndChart
+    fetchListeningTime
   );
 
   const insights = useSWR(INSIGHTS, fetchInsights);
