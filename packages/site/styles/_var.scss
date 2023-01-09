@@ -1,0 +1,15 @@
+$primary: #191C21;
+$secondary: #252932;
+$tertiary: #FFFFFF;
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+// Header
+$navbar-background-color: $primary;
+$navbar-text-color: $tertiary;
+
+// Layout
+$page-background-color: $secondary;
+$content-bg-color: $tertiary;

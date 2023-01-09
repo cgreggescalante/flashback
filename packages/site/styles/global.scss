@@ -1,0 +1,28 @@
+$primary: #8AAD9D;
+$secondary: #778387;
+
+@import "bootstrap";
+
+// Header
+
+.headerNavBar {
+  background-color: $secondary
+}
+
+// Layout
+
+Layout {
+  background-color: $primary;
+  height: available;
+
+  Container {
+    width: 75%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    max-width: 1200px;
+  }
+
+  Card {
+    padding: 2%;
+  }
+}

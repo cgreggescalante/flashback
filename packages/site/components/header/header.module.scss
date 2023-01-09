@@ -1,0 +1,9 @@
+@import "../../styles/var";
+
+.navbar {
+  background-color: $navbar-background-color
+}
+
+.navlink {
+  color: darken($navbar-text-color, 30)
+}

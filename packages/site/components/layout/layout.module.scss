@@ -1,0 +1,27 @@
+@import "../../styles/var";
+
+.layout {
+  background-color: $page-background-color;
+  height: available;
+}
+
+.container {
+  min-width: 700px;
+  width: 75%;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  max-width: 1200px;
+}
+
+@media (max-width: 700px) {
+  .container {
+    min-width: 0;
+    width: 100%
+  }
+}
+
+
+.card {
+  background-color: $content-bg-color;
+  padding: 2%;
+}

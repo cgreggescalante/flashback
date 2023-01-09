@@ -1,4 +1,5 @@
 import { useTable } from "react-table";
+// @ts-ignore
 import { customTable } from "./table.module.css";
 
 const Table = ({ data, columns }: { data: any; columns: any }) => {

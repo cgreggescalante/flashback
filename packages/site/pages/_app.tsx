@@ -1,9 +1,9 @@
-import "../theme.scss";
+import "../styles/global.scss";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { MainLayout } from "../components/layout";
+import Layout from "../components/layout/layout";
 
 const queryClient = new QueryClient();
 
@@ -13,9 +13,9 @@ const App = ({ Component, pageProps }: AppProps) => (
       <title>Flashback</title>
     </Head>
     <QueryClientProvider client={queryClient}>
-      <MainLayout>
+      <Layout>
         <Component {...pageProps} />
-      </MainLayout>
+      </Layout>
     </QueryClientProvider>
   </>
 );
