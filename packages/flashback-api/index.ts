@@ -1,7 +1,8 @@
-import { artistGetAllIds, artistGetByPlayTime, artistGetIds } from "./src/api";
+import { artistGetAllIds, artistGetByPlayTime, artistGetIds, trackGetByPlayTime } from "./src/api";
 
 export {
   artistGetIds,
   artistGetAllIds,
-  artistGetByPlayTime
+  artistGetByPlayTime,
+  trackGetByPlayTime
 }

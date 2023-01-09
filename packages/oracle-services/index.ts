@@ -1,4 +1,3 @@
-import { topTracks, topTracksByYear } from "./src/track/by_play_time";
 import {
   createArtistIfNotExists,
   createGenreIfNotExists,
@@ -9,8 +8,6 @@ import { fetchInsights, fetchTableAndChart } from "./src/listeningTime/listening
 import { ARTISTS, INSIGHTS, LISTENING_TIME, TOP_ARTISTS, TOP_TRACKS } from "./src/uris";
 
 export {
-  topTracks,
-  topTracksByYear,
   createPlayIfNotExists,
   createTrackIfNotExists,
   createArtistIfNotExists,

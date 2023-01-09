@@ -98,23 +98,32 @@ export const artistGetByPlayTime = async (offset: number = 0, limit: number = 10
 /**
  *
  */
-export const trackGetByPlayTime = async (artist_id: string, offset: number = 0, limit: number = 100, rangeStart?: Date, rangeEnd?: Date): Promise<any[]> => {
-  const start = dateToTimestamp(rangeStart ? rangeStart : new Date(0, 0, 1));
-  const end = dateToTimestamp(rangeEnd ? rangeEnd : new Date(9999, 0, 1));
+export const trackGetByPlayTime = async (offset: number = 0, limit: number = 100, rangeStart?: Date, rangeEnd?: Date): Promise<any[]> => {
+  const start = dateToTimestamp(rangeStart ? rangeStart : new Date(0, 0));
+  const end = dateToTimestamp(rangeEnd ? rangeEnd : new Date(9999, 0));
 
-  return await postStatement(
-    `SELECT SUM(MS_PLAYED) AS TOTAL_MS_PLAYED, TRACK_NAME, ARTIST_NAME, TRACK.ARTIST_ID, ALBUM_NAME
-    FROM PLAY
-    JOIN TRACK ON PLAY.TRACK_ID = TRACK.ID
-    JOIN GENRE ON GENRE.ARTIST_ID = TRACK.ARTIST_ID
-    WHERE 
-        (TRACK.ARTIST_ID = :artist_id OR :artist_id IS NULL)
-        AND PLAY.TS >= TO_TIMESTAMP('${start}', 'YYYY-MM-DD HH24:MI:SS')
-        AND PLAY.TS < TO_TIMESTAMP('${end}', 'YYYY-MM-DD HH24:MI:SS')
-        AND (GENRE.NAME = :genre OR :genre IS NULL)
-    GROUP BY TRACK_NAME, ARTIST_NAME, TRACK.ARTIST_ID, ALBUM_NAME
-    ORDER BY SUM(MS_PLAYED) DESC 
-    OFFSET ${offset} ROWS 
-    FETCH NEXT ${limit} ROWS ONLY`
-  )
+  return await postStatementJSON({
+    statementText: "SELECT SUM(MS_PLAYED) AS TOTAL_MS_PLAYED, TRACK_NAME, ARTIST_NAME, TRACK.ARTIST_ID, ALBUM_NAME " +
+      "FROM PLAY " +
+      "JOIN TRACK ON PLAY.TRACK_ID = TRACK.ID " +
+      "WHERE " +
+      "PLAY.TS >= TO_TIMESTAMP(:start, 'YYYY-MM-DD HH24:MI:SS') " +
+      "AND PLAY.TS < TO_TIMESTAMP(:end, 'YYYY-MM-DD HH24:MI:SS') " +
+      "GROUP BY TRACK_NAME, ARTIST_NAME, TRACK.ARTIST_ID, ALBUM_NAME " +
+      "ORDER BY SUM(MS_PLAYED) DESC",
+    limit,
+    offset,
+    binds: [
+      {
+        name: "start",
+        data_type: "VARCHAR2",
+        value: start
+      },
+      {
+        name: "end",
+        data_type: "VARCHAR2",
+        value: end
+      }
+    ]
+  });
 }
