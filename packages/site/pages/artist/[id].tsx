@@ -3,7 +3,7 @@ import useSWR from "swr";
 import LoadedComponent from "../../components/loadedComponent";
 import { useRouter } from "next/router";
 import { Bar } from "react-chartjs-2";
-import Table from "../../components/table";
+import Table from "../../components/table/table";
 import { chartOptions, topTrackChart, topTrackTable } from "format-data";
 import { Chart, registerables } from "chart.js";
 import { ArtistAPI } from "flashback-api";

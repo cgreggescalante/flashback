@@ -7,7 +7,7 @@ import { SWRConfig } from "swr/_internal";
 
 import LoadedComponent from "../components/loadedComponent";
 import SelectDate from "../components/selectDate";
-import Table from "../components/table";
+import Table from "../components/table/table";
 import { ArtistAPI } from "flashback-api";
 
 Chart.register(...registerables);

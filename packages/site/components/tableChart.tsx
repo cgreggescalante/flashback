@@ -1,6 +1,6 @@
 import { Bar } from "react-chartjs-2";
 import { chartOptions } from "format-data";
-import Table from "./table";
+import Table from "./table/table";
 
 /**
  * Simple component that renders a chart and table

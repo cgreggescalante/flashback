@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Nav, Navbar, NavLink } from "react-bootstrap";
 
 const Header = ({ links }: { links: any }) => (
-  <Navbar>
+  <Navbar bg={"secondary"}>
     <Nav>
       {links.map((link: any, index: number) => (
         <NavLink key={index} as={Link} href={link.path}>
