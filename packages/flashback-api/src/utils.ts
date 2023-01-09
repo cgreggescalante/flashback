@@ -1,7 +1,7 @@
 const BASE_URL =
   "https://g0cde1310ac37a5-flashback.adb.us-ashburn-1.oraclecloudapps.com/ords/admin/_/sql";
 
-export const postStatementJSON = async (body: any): Promise<any[]> => {
+export const postStatement = async (body: any): Promise<any[]> => {
   return await fetch(BASE_URL, {
     method: "POST",
     headers: {

@@ -1,4 +1,4 @@
-import { dateToTimestamp, postStatementJSON } from "./utils";
+import { dateToTimestamp, postStatement } from "./utils";
 
 export class TrackAPI {
   static getByPlayTime = async (
@@ -10,7 +10,7 @@ export class TrackAPI {
     const start = dateToTimestamp(rangeStart ? rangeStart : new Date(0, 0));
     const end = dateToTimestamp(rangeEnd ? rangeEnd : new Date(9999, 0));
 
-    return await postStatementJSON({
+    return await postStatement({
       statementText:
         "SELECT SUM(MS_PLAYED) AS TOTAL_MS_PLAYED, TRACK_NAME, ARTIST_NAME, TRACK.ARTIST_ID, ALBUM_NAME " +
         "FROM PLAY " +

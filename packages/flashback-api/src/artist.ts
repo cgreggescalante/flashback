@@ -1,11 +1,11 @@
-import { dateToTimestamp, postStatementJSON } from "./utils";
+import { dateToTimestamp, postStatement } from "./utils";
 
 export class ArtistAPI {
   static getIds = async (
     limit: number,
     offset: number
   ): Promise<string[]> => {
-    return await postStatementJSON({
+    return await postStatement({
       statementText: "SELECT ID FROM ARTIST",
       offset,
       limit
@@ -37,7 +37,7 @@ export class ArtistAPI {
     const start = dateToTimestamp(rangeStart ? rangeStart : new Date(0, 0, 1));
     const end = dateToTimestamp(rangeEnd ? rangeEnd : new Date(9999, 0, 1));
 
-    return await postStatementJSON({
+    return await postStatement({
       statementText:
         "SELECT SUM(MS_PLAYED) AS TOTAL_MS_PLAYED, ARTIST.ID AS ARTIST_ID, ARTIST.NAME AS ARTIST_NAME, ARTIST.POPULARITY, ARTIST.FOLLOWERS " +
         "FROM ARTIST " +
