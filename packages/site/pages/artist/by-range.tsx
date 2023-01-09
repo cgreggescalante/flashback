@@ -8,7 +8,7 @@ import { SWRConfig } from "swr/_internal";
 import LoadedComponent from "../../components/loadedComponent";
 import SelectDate from "../../components/selectDate";
 import Table from "../../components/table";
-import { artistGetByPlayTime } from "flashback-api";
+import { ArtistAPI } from "flashback-api";
 
 Chart.register(...registerables);
 
@@ -18,12 +18,10 @@ const fetcher = ({
 }: {
   rangeStart: Date;
   rangeEnd: Date;
-}) => {
-  return artistGetByPlayTime(0, 100, rangeStart, rangeEnd).then((artists) => ({
+}) => ArtistAPI.artistGetByPlayTime(0, 100, rangeStart, rangeEnd).then((artists) => ({
     chartData: topArtistChart(artists.slice(0, 10)),
     tableData: topArtistTable(artists)
   }));
-}
 
 
 const DataComponent = ({ data }) => (

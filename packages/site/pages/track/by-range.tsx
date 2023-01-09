@@ -8,7 +8,7 @@ import { SWRConfig } from "swr/_internal";
 import LoadedComponent from "../../components/loadedComponent";
 import SelectDate from "../../components/selectDate";
 import Table from "../../components/table";
-import { trackGetByPlayTime } from "flashback-api";
+import { TrackAPI } from "flashback-api";
 
 Chart.register(...registerables);
 
@@ -19,7 +19,7 @@ const fetcher = ({
   rangeStart: Date;
   rangeEnd: Date;
 }) =>
-  trackGetByPlayTime(0, 100, rangeStart, rangeEnd).then((tracks) => ({
+  TrackAPI.trackGetByPlayTime(0, 100, rangeStart, rangeEnd).then((tracks) => ({
     chartData: topTrackChart(tracks.slice(0, 10)),
     tableData: topTrackTable(tracks)
   }));

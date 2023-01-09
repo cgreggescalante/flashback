@@ -6,12 +6,12 @@ import { Bar } from "react-chartjs-2";
 import Table from "../../components/table";
 import { chartOptions, topTrackChart, topTrackTable } from "format-data";
 import { Chart, registerables } from "chart.js";
-import { artistGetAllIds } from "flashback-api";
+import { ArtistAPI } from "flashback-api";
 
 Chart.register(...registerables);
 
 export const getStaticPaths = async () => {
-  const ids = await artistGetAllIds();
+  const ids = await ArtistAPI.artistGetAllIds();
 
   const paths = []
 
