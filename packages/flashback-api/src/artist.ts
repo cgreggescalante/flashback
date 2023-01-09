@@ -4,7 +4,7 @@ export class ArtistAPI {
   static getIds = async (
     limit: number,
     offset: number
-  ): Promise<string[]> => {
+  ): Promise<any[]> => {
     return await postStatement({
       statementText: "SELECT ID FROM ARTIST",
       offset,
@@ -23,9 +23,10 @@ export class ArtistAPI {
         break;
       }
       ids.push(...result);
+      offset += limit;
     }
 
-    return ids;
+    return ids.map(id => id.id);
   };
 
   static getByPlayTime = async (
