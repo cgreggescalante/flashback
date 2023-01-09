@@ -2,8 +2,8 @@ import Header from "./header";
 
 const MAIN = [
   { path: "/", name: "Home" },
-  { path: "/track/by-range", name: "Top Tracks" },
-  { path: "/artist/by-range", name: "Top Artists" },
+  { path: "/track", name: "Top Tracks" },
+  { path: "/artist", name: "Top Artists" },
   { path: "/listeningTime", name: "Listening Time" }
 ];
 
