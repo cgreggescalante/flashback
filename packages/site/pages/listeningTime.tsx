@@ -1,11 +1,4 @@
 import { Chart, registerables } from "chart.js";
-import { INSIGHTS } from "oracle-services";
-import { useState } from "react";
-import { Bar } from "react-chartjs-2";
-import useSWR from "swr";
-
-import LoadedComponent from "../components/loadedComponent";
-import Table from "../components/table";
 import { InsightAPI, ListeningTimeAPI } from "flashback-api";
 import {
   listeningTimeDayChart,
@@ -17,6 +10,13 @@ import {
   listeningTimeYearChart,
   listeningTimeYearTable
 } from "format-data";
+import { INSIGHTS } from "oracle-services";
+import { useState } from "react";
+import useSWR from "swr";
+
+import InsightsComponent from "../components/insight";
+import LoadedComponent from "../components/loadedComponent";
+import TableChartComponent from "../components/tableChart";
 
 Chart.register(...registerables);
 
@@ -39,57 +39,22 @@ const resolutionConfig = [
   }
 ];
 
-const chartOptions = {
-  responsive: true,
-  plugins: {
-    title: {
-      display: true,
-      text: "Listening Time"
-    }
-  }
-};
-
-const msToHoursMinutesSeconds = (ms: number) => {
-  const hours = Math.floor(ms / 1000 / 60 / 60);
-  ms -= hours * 1000 * 60 * 60;
-  const minutes = Math.floor(ms / 1000 / 60);
-  ms -= minutes * 1000 * 60;
-  const seconds = Math.floor(ms / 1000);
-  return `${hours} hour${
-    hours > 1 || hours == 0 ? "s" : ""
-  }, ${minutes} minute${
-    minutes > 1 || minutes == 0 ? "s" : ""
-  }, ${seconds} second${seconds > 1 || seconds == 0 ? "s" : ""}`;
-};
-
-const InsightsComponent = ({ data }) => (
-  <>
-    Yearly Max: {msToHoursMinutesSeconds(data.yearly.maximum)} <br />
-    Yearly Average: {msToHoursMinutesSeconds(data.yearly.average)} <br />
-    <br />
-    Monthly Max: {msToHoursMinutesSeconds(data.monthly.maximum)} <br />
-    Monthly Average: {msToHoursMinutesSeconds(data.monthly.average)} <br />
-    <br />
-    Weekly Max: {msToHoursMinutesSeconds(data.weekly.maximum)} <br />
-    Weekly Average: {msToHoursMinutesSeconds(data.weekly.average)} <br />
-    <br />
-    Daily Max: {msToHoursMinutesSeconds(data.daily.maximum)} <br />
-    Daily Average: {msToHoursMinutesSeconds(data.daily.average)}
-  </>
-);
-
 const fetchInsights = async () =>
-  await Promise.all([InsightAPI.getDaily(), InsightAPI.getWeekly(), InsightAPI.getMonthly(), InsightAPI.getYearly()])
-    .then(values => ({
-      daily: values[0][0],
-      weekly: values[1][0],
-      monthly: values[2][0],
-      yearly: values[3][0]
-    }));
+  await Promise.all([
+    InsightAPI.getDaily(),
+    InsightAPI.getWeekly(),
+    InsightAPI.getMonthly(),
+    InsightAPI.getYearly()
+  ]).then((values) => ({
+    daily: values[0][0],
+    weekly: values[1][0],
+    monthly: values[2][0],
+    yearly: values[3][0]
+  }));
 
 const fetchListeningTime = async ({ resolution, pageIndex }) => {
   let promise: Promise<any>;
-  let { formatChart, formatTable} = resolutionConfig[resolution];
+  let { formatChart, formatTable } = resolutionConfig[resolution];
 
   switch (resolution) {
     case 0: {
@@ -104,21 +69,15 @@ const fetchListeningTime = async ({ resolution, pageIndex }) => {
       promise = ListeningTimeAPI.monthly(pageIndex);
       break;
     }
-    case 3: promise = ListeningTimeAPI.yearly(0);
+    case 3:
+      promise = ListeningTimeAPI.yearly(0);
   }
 
-  return await promise.then(data => ({
+  return await promise.then((data) => ({
     chartData: formatChart(data),
     tableData: formatTable(data)
-  }))
-}
-
-const TableChartComponent = ({ data }) => (
-  <>
-    <Bar options={chartOptions} data={data.chartData} />
-    <Table data={data.tableData.data} columns={data.tableData.columns} />
-  </>
-);
+  }));
+};
 
 const ListeningTime = () => {
   const [resolution, setResolution] = useState(1);
@@ -166,7 +125,11 @@ const ListeningTime = () => {
       </button>
       <button onClick={() => setPageIndex(pageIndex + 1)}>{">"}</button>
       <br />
-      <LoadedComponent data={tableChart.data} error={tableChart.error} component={TableChartComponent} />
+      <LoadedComponent
+        data={tableChart.data}
+        error={tableChart.error}
+        component={TableChartComponent}
+      />
     </>
   );
 };
