@@ -1,20 +1,20 @@
-import chartOptions from "./chart/chartOptions";
+import chartOptions from "./src/chart/chartOptions";
 import {
   listeningTimeDayChart,
   listeningTimeMonthChart,
   listeningTimeWeekChart,
   listeningTimeYearChart
-} from "./chart/listeningTime";
-import topArtistChart from "./chart/topArtists";
-import topTrackChart from "./chart/topTracks";
+} from "./src/chart/listeningTime";
+import topArtistChart from "./src/chart/topArtists";
+import topTrackChart from "./src/chart/topTracks";
 import {
   listeningTimeDayTable,
   listeningTimeMonthTable,
   listeningTimeWeekTable,
   listeningTimeYearTable
-} from "./table/listeningTime";
-import topArtistTable from "./table/topArtists";
-import topTrackTable from "./table/topTracks";
+} from "./src/table/listeningTime";
+import topArtistTable from "./src/table/topArtists";
+import topTrackTable from "./src/table/topTracks";
 
 export {
   topTrackTable,

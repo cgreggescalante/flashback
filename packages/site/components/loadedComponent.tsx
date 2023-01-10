@@ -10,7 +10,10 @@ const LoadedComponent = ({
   error: any;
   component: (data) => JSX.Element;
 }) => {
-  if (error) return <FailedToLoad />;
+  if (error) {
+    console.error(error)
+    return <FailedToLoad />;
+  }
   if (!data) return <LoadingData />;
 
   return component({ data });

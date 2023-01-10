@@ -1,58 +1,109 @@
 import { Chart, registerables } from "chart.js";
-import { chartOptions, topArtistChart, topArtistTable } from "format-data";
 import { useState } from "react";
-import { Bar } from "react-chartjs-2";
 import useSWR from "swr";
-import { SWRConfig } from "swr/_internal";
 
 import LoadedComponent from "../components/loadedComponent";
 import SelectDate from "../components/selectDate";
-import Table from "../components/table/table";
-import { ArtistAPI } from "flashback-api";
+import { ArtistAPI, TrackAPI } from "flashback-api";
+import { useRouter } from "next/router";
+import { topArtistChart, topArtistTable, topTrackChart, topTrackTable } from "format-data";
+import TableChartComponent from "../components/tableChart";
 
 Chart.register(...registerables);
 
 const fetcher = ({
   rangeStart,
-  rangeEnd
+  rangeEnd,
+  artistId
 }: {
   rangeStart: Date;
   rangeEnd: Date;
-}) => ArtistAPI.getByPlayTime(0, 100, rangeStart, rangeEnd).then((artists) => ({
-    chartData: topArtistChart(artists.slice(0, 10)),
-    tableData: topArtistTable(artists)
-  }));
+  artistId: string
+}) => {
+  if (artistId !== undefined) {
+    return null;
+  }
 
+  return ArtistAPI.getByPlayTime({ rangeStart, rangeEnd })
+    .then((artists) => ({
+      chartName: "Top Artists",
+      chartData: topArtistChart(artists.slice(0, 10)),
+      tableData: topArtistTable(artists)
+    }));
+}
 
-const DataComponent = ({ data }) => (
+const fetchArtist = async ({ artistId }: { artistId: string }) => {
+  if (artistId == undefined) {
+    return null;
+  }
+
+  return await ArtistAPI.get(artistId)
+    .then(data => data[0])
+}
+
+const fetchTracks = async ({ artistId }: { artistId: string }) => {
+  if (artistId == undefined) {
+    return null;
+  }
+
+  return await TrackAPI.getByPlayTime({ artistId })
+    .then(data => ({
+      chartName: "Top Tracks",
+      chartData: topTrackChart(data.slice(0, 10)),
+      tableData: topTrackTable(data)
+    }))
+}
+
+const ArtistComponent = ({ data }) => (
   <>
-    <Bar options={chartOptions("Top Artists")} data={data.chartData} />
-    <Table data={data.tableData.data} columns={data.tableData.columns} />
+    <h2>{ data.name }</h2>
+    Followers : { data.followers } <br />
+    Popularity : { data.popularity } <br />
   </>
-);
+)
 
 const Artist = () => {
   const [rangeStart, setRangeStart] = useState(new Date(0, 0));
   const [rangeEnd, setRangeEnd] = useState(new Date(9999, 0));
 
-  const { data, error } = useSWR({ rangeStart, rangeEnd, key: "artists" });
+  const router = useRouter()
+
+  const path = router.asPath;
+
+  let artistId: string;
+
+  if (path.includes("#")) {
+    artistId = path.split("#")[1];
+  }
+
+  const artistSWR = useSWR({ artistId, key: "artist" }, fetchArtist);
+  const trackSWR = useSWR({ artistId, key: "track" }, fetchTracks);
+
+  const artistListSWR = useSWR({ rangeStart, rangeEnd, artistId, key: "artists" }, fetcher);
 
   return (
     <>
+      {
+        artistId ? (
+          <LoadedComponent data={artistSWR.data} error={artistSWR.error} component={ArtistComponent} />
+        ) : null
+      }
       Start <SelectDate setDate={setRangeStart} /> <br />
       End <SelectDate setDate={setRangeEnd} /> <br />
-      <LoadedComponent data={data} error={error} component={DataComponent} />
+      {
+        artistId ? (
+          <>
+
+            <LoadedComponent data={trackSWR.data} error={trackSWR.error} component={TableChartComponent} />
+          </>
+        ) : (
+          <>
+            <LoadedComponent data={artistListSWR.data} error={artistListSWR.error} component={TableChartComponent} />
+          </>
+        )
+      }
     </>
-  );
+  )
 };
 
-export default () => (
-  <SWRConfig
-    value={{
-      revalidateOnFocus: false,
-      fetcher: fetcher
-    }}
-  >
-    <Artist />
-  </SWRConfig>
-);
+export default Artist

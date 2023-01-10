@@ -49,12 +49,8 @@ const fetchTracks = ({ id }: { id: string }) => {
     }))
 }
 
-const ArtistComponent = ({ data }) => (
-  <>
-    <h2>{ data.name }</h2>
+const ArtistComponent = ({ data }) => <h2>{ data.name }</h2>
 
-  </>
-)
 
 const TrackComponent = ({ data }) => (
   <>

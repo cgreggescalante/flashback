@@ -1,8 +1,8 @@
 {
   "name": "format-data",
   "version": "1.0.0",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build format-data": "tsc src/index.ts --watch --jsx react-jsx --outDir dist"
+    "build format-data": "tsc index.ts --watch --jsx react-jsx --esModuleInterop --outDir dist"
   }
 }

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export class TableColumns {
   static TRACK_NAME = {
     Header: "Track",
@@ -12,7 +14,11 @@ export class TableColumns {
   static ARTIST_NAME = {
     Header: "Artist",
     accessor: "artist_name",
-    Cell: ({ row }: { row: any }) => (<a href={`/artist/${row.original.artist_id}`}>{ row.original.artist_name }</a>)
+    Cell: ({ row }: { row: any }) => (
+      <Link href={`/artist#${row.original.artist_id}`}>
+        { row.original.artist_name }
+      </Link>
+    )
   };
   static MINUTES_PLAYED = {
     Header: "Minutes Played",

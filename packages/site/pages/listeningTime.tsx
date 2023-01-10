@@ -74,6 +74,7 @@ const fetchListeningTime = async ({ resolution, pageIndex }) => {
   }
 
   return await promise.then((data) => ({
+    chartName: "Listening Time",
     chartData: formatChart(data),
     tableData: formatTable(data)
   }));
